@@ -114,8 +114,6 @@ static const struct snd_soc_dapm_widget fsl_asoc_card_dapm_widgets[] = {
 	SND_SOC_DAPM_MIC("DMIC", NULL),
 };
 
-static const char* max9809x_codec_dai_name = "HiFi";
-
 static int fsl_asoc_card_hw_params(struct snd_pcm_substream *substream,
 				   struct snd_pcm_hw_params *params)
 {
@@ -400,11 +398,6 @@ static int fsl_asoc_card_late_probe(struct snd_soc_card *card)
 	return 0;
 }
 
-static int fsl_asoc_card_is_max9809x(struct device_node* np) {
-	return (of_device_is_compatible(np, "fsl,imx-audio-max98090")
-		|| of_device_is_compatible(np, "fsl,imx-audio-max98091"));
-}
-
 static int fsl_asoc_card_probe(struct platform_device *pdev)
 {
 	struct device_node *cpu_np, *codec_np, *asrc_np;
@@ -414,6 +407,7 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
 	struct fsl_asoc_card_priv *priv;
 	struct i2c_client *codec_dev;
 	struct clk *codec_clk;
+	const char *codec_dai_name;
 	u32 width;
 	int ret;
 
@@ -466,6 +460,7 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
 
 	/* Diversify the card configurations */
 	if (of_device_is_compatible(np, "fsl,imx-audio-cs42888")) {
+		codec_dai_name = "cs42888";
 		priv->card.set_bias_level = NULL;
 		priv->cpu_priv.sysclk_freq[TX] = priv->codec_priv.mclk_freq;
 		priv->cpu_priv.sysclk_freq[RX] = priv->codec_priv.mclk_freq;
@@ -474,15 +469,19 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
 		priv->cpu_priv.slot_width = 32;
 		priv->dai_fmt |= SND_SOC_DAIFMT_CBS_CFS;
 	} else if (of_device_is_compatible(np, "fsl,imx-audio-sgtl5000")) {
+		codec_dai_name = "sgtl5000";
 		priv->codec_priv.mclk_id = SGTL5000_SYSCLK;
 		priv->dai_fmt |= SND_SOC_DAIFMT_CBM_CFM;
 	} else if (of_device_is_compatible(np, "fsl,imx-audio-wm8962")) {
+		codec_dai_name = "wm8962";
 		priv->card.set_bias_level = fsl_asoc_card_set_bias_level;
 		priv->codec_priv.mclk_id = WM8962_SYSCLK_MCLK;
 		priv->codec_priv.fll_id = WM8962_SYSCLK_FLL;
 		priv->codec_priv.pll_id = WM8962_FLL;
 		priv->dai_fmt |= SND_SOC_DAIFMT_CBM_CFM;
-	} else if (fsl_asoc_card_is_max9809x(np)) {
+	} else if ((of_device_is_compatible(np, "fsl,imx-audio-max98090")
+			|| of_device_is_compatible(np, "fsl,imx-audio-max98091"))) {
+		codec_dai_name = "HiFi";
 		priv->codec_priv.mclk_id = 0x00;
 		priv->dai_fmt |= SND_SOC_DAIFMT_CBS_CFS;
 	} else {
@@ -531,8 +530,7 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
 	/* Normal DAI Link */
 	priv->dai_link[0].cpu_of_node = cpu_np;
 	priv->dai_link[0].codec_of_node = codec_np;
-	priv->dai_link[0].codec_dai_name = fsl_asoc_card_is_max9809x(np)
-			? max9809x_codec_dai_name : codec_dev->name;
+	priv->dai_link[0].codec_dai_name = codec_dai_name;
 	priv->dai_link[0].platform_of_node = cpu_np;
 	priv->dai_link[0].dai_fmt = priv->dai_fmt;
 	priv->card.num_links = 1;
@@ -541,7 +539,7 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
 		/* DPCM DAI Links only if ASRC exsits */
 		priv->dai_link[1].cpu_of_node = asrc_np;
 		priv->dai_link[1].platform_of_node = asrc_np;
-		priv->dai_link[2].codec_dai_name = codec_dev->name;
+		priv->dai_link[2].codec_dai_name = codec_dai_name;
 		priv->dai_link[2].codec_of_node = codec_np;
 		priv->dai_link[2].cpu_of_node = cpu_np;
 		priv->dai_link[2].dai_fmt = priv->dai_fmt;
