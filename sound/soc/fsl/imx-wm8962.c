@@ -245,7 +245,7 @@ static int imx_hifi_hw_params(struct snd_pcm_substream *substream,
 	return 0;
 }
 
-static struct snd_soc_ops imx_hifi_ops = {
+static const struct snd_soc_ops imx_hifi_ops = {
 	.startup = imx_hifi_startup,
 	.hw_params = imx_hifi_hw_params,
 };
