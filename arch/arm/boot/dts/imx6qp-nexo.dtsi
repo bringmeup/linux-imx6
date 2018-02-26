@@ -313,12 +313,12 @@
 	};
 
 
-// 	pinctrl_pwm1: pwm1grp {
-// 		fsl,pins = <
-// 			MX6QDL_PAD_SD1_DAT3__PWM1_OUT		0x030b1
-// 		>;
-// 	};
-// 
+	pinctrl_pwm1: pwm1grp {
+		fsl,pins = <
+			MX6QDL_PAD_GPIO_9__PWM1_OUT		0x030b1
+		>;
+	};
+
 // 	pinctrl_pwm2: pwm2grp {
 // 		fsl,pins = <
 // 			MX6QDL_PAD_SD1_DAT2__PWM2_OUT		0x030b1
@@ -484,8 +484,8 @@
 		mxcfb1 = &fb_lcd;
 		mxcfb2 = &fb_lvds2;
 		mxcfb3 = &fb_hdmi;
-// 		pwm_lcd = &pwm1;
-// 		pwm_lvds = &pwm4;
+// 		pwm_lcd = &pwm4;
+		pwm_lvds = &pwm1;
 // 		pwm_lvds2 = &pwm2;
 		t_lvds = &t_lvds;
 		t_lvds2 = &t_lvds2;
@@ -496,7 +496,7 @@
 		compatible = "pwm-backlight";
 		default-brightness-level = <8>;
 		display = <&fb_lcd>;
-// 		pwms = <&pwm1 0 5000000>;
+// 		pwms = <&pwm4 0 5000000>;
 	};
 
 	backlight_lvds: backlight_lvds {
@@ -504,7 +504,7 @@
 		compatible = "pwm-backlight";
 		default-brightness-level = <8>;
 		display = <&fb_lvds>;
-// 		pwms = <&pwm4 0 5000000>;
+// 		pwms = <&pwm1 0 5000000>;
 	};
 
 	backlight_lvds2: backlight_lvds2 {
@@ -561,8 +561,8 @@
 	fb_lvds: fb@0 {
 		compatible = "fsl,mxc_sdc_fb";
 		disp_dev = "ldb";
-		interface_pix_fmt = "RGB666";
-		default_bpp = <16>;
+		interface_pix_fmt = "RGB24";
+		default_bpp = <24>;
 		int_clk = <0>;
 		late_init = <0>;
 		status = "disabled";
@@ -1236,11 +1236,11 @@
 	status = "okay";
 };
 
-// &pwm1 {
-// 	pinctrl-names = "default";
-// 	pinctrl-0 = <&pinctrl_pwm1>;
-// 	status = "okay";
-// };
+&pwm1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_pwm1>;
+	status = "okay";
+};
 // 
 // &pwm2 {
 // 	pinctrl-names = "default";
