@@ -63,9 +63,9 @@
 	>;
 };
 
-&sata {
-	status = "okay";
-};
+// &sata {
+// 	status = "okay";
+// };
 
 &v4l2_cap_2 {
 	ipu_id = <1>;
