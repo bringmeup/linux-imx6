@@ -305,12 +305,12 @@
 		>;
 	};
 
-	pinctrl_pcie: pciegrp {
-		fsl,pins = <
-#define GP_PCIE_RESET	<&gpio6 31 GPIO_ACTIVE_LOW>
-			MX6QDL_PAD_EIM_BCLK__GPIO6_IO31		0x030b0
-		>;
-	};
+// 	pinctrl_pcie: pciegrp {
+// 		fsl,pins = <
+// #define GP_PCIE_RESET	<&gpio6 31 GPIO_ACTIVE_LOW>
+// 			MX6QDL_PAD_EIM_BCLK__GPIO6_IO31		0x030b0
+// 		>;
+// 	};
 
 
 	pinctrl_pwm1: pwm1grp {
@@ -1229,12 +1229,12 @@
 	status = "okay";
 };
 
-&pcie {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_pcie>;
-	reset-gpios = GP_PCIE_RESET;
-	status = "okay";
-};
+// &pcie {
+// 	pinctrl-names = "default";
+// 	pinctrl-0 = <&pinctrl_pcie>;
+// 	reset-gpios = GP_PCIE_RESET;
+// 	status = "okay";
+// };
 
 &pwm1 {
 	pinctrl-names = "default";
