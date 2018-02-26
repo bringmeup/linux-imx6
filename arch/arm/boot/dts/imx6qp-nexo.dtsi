@@ -101,11 +101,11 @@
 		>;
 	};
 
-	pinctrl_hdmi_cec: hdmi-cecgrp {
-		fsl,pins = <
-			MX6QDL_PAD_EIM_A25__HDMI_TX_CEC_LINE	0x1f8b0
-		>;
-	};
+// 	pinctrl_hdmi_cec: hdmi-cecgrp {
+// 		fsl,pins = <
+// 			MX6QDL_PAD_EIM_A25__HDMI_TX_CEC_LINE	0x1f8b0
+// 		>;
+// 	};
 
 	pinctrl_hog: hoggrp {
 		fsl,pins = <
@@ -471,7 +471,7 @@
 		backlight_lvds2 = &backlight_lvds2;
 		bt_rfkill = &bt_rfkill;
 		bt_kim = &bt_kim;
-		fb_hdmi = &fb_hdmi;
+// 		fb_hdmi = &fb_hdmi;
 		fb_lcd = &fb_lcd;
 		fb_lvds = &fb_lvds;
 		fb_lvds2 = &fb_lvds2;
@@ -483,7 +483,7 @@
 		mxcfb0 = &fb_lvds;
 		mxcfb1 = &fb_lcd;
 		mxcfb2 = &fb_lvds2;
-		mxcfb3 = &fb_hdmi;
+// 		mxcfb3 = &fb_hdmi;
 // 		pwm_lcd = &pwm4;
 		pwm_lvds = &pwm1;
 // 		pwm_lvds2 = &pwm2;
@@ -588,16 +588,16 @@
 		status = "disabled";
 	};
 
-	fb_hdmi: fb@3 {
-		compatible = "fsl,mxc_sdc_fb";
-		disp_dev = "hdmi";
-		interface_pix_fmt = "RGB24";
-		mode_str ="1280x720M@60";
-		default_bpp = <24>;
-		int_clk = <0>;
-		late_init = <0>;
-		status = "disabled";
-	};
+// 	fb_hdmi: fb@3 {
+// 		compatible = "fsl,mxc_sdc_fb";
+// 		disp_dev = "hdmi";
+// 		interface_pix_fmt = "RGB24";
+// 		mode_str ="1280x720M@60";
+// 		default_bpp = <24>;
+// 		int_clk = <0>;
+// 		late_init = <0>;
+// 		status = "disabled";
+// 	};
 
 	gpio-keys {
 		compatible = "gpio-keys";
@@ -793,12 +793,12 @@
 		spk-mute-on-hp-detect;
 	};
 
-	sound-hdmi {
-		compatible = "fsl,imx6q-audio-hdmi",
-			     "fsl,imx-audio-hdmi";
-		model = "imx-audio-hdmi";
-		hdmi-controller = <&hdmi_audio>;
-	};
+// 	sound-hdmi {
+// 		compatible = "fsl,imx6q-audio-hdmi",
+// 			     "fsl,imx-audio-hdmi";
+// 		model = "imx-audio-hdmi";
+// 		hdmi-controller = <&hdmi_audio>;
+// 	};
 
 	v4l2_cap_0 {
 		compatible = "fsl,imx6q-v4l2-capture";
@@ -905,27 +905,27 @@
 	};
 };
 
-&hdmi_audio {
-	status = "okay";
-};
-
-&hdmi_cec {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_hdmi_cec>;
-	status = "okay";
-};
-
-&hdmi_core {
-	ipu_id = <1>;
-	disp_id = <0>;
-	status = "okay";
-};
-
-&hdmi_video {
-	fsl,phy_reg_vlev = <0x0294>;
-	fsl,phy_reg_cksymtx = <0x800d>;
-	status = "okay";
-};
+// &hdmi_audio {
+// 	status = "okay";
+// };
+// 
+// &hdmi_cec {
+// 	pinctrl-names = "default";
+// 	pinctrl-0 = <&pinctrl_hdmi_cec>;
+// 	status = "okay";
+// };
+// 
+// &hdmi_core {
+// 	ipu_id = <1>;
+// 	disp_id = <0>;
+// 	status = "okay";
+// };
+// 
+// &hdmi_video {
+// 	fsl,phy_reg_vlev = <0x0294>;
+// 	fsl,phy_reg_cksymtx = <0x800d>;
+// 	status = "okay";
+// };
 
 &i2c1 {
 	clock-frequency = <100000>;
@@ -963,10 +963,10 @@
 	sda-gpios = GP_I2C2_SDA;
 	status = "okay";
 
-	hdmi: edid@50 {
-		compatible = "fsl,imx6-hdmi-i2c";
-		reg = <0x50>;
-	};
+// 	hdmi: edid@50 {
+// 		compatible = "fsl,imx6-hdmi-i2c";
+// 		reg = <0x50>;
+// 	};
 };
 
 &i2c2a {

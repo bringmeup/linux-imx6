@@ -38,9 +38,9 @@
 	prefetch;
 };
 
-&fb_hdmi {
-	prefetch;
-};
+// &fb_hdmi {
+// 	prefetch;
+// };
 
 &ov5640 {
 	ipu_id = <1>;
