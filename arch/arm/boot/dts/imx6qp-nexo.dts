@@ -15,7 +15,7 @@
 
 #include "imx6q.dtsi"
 #include "imx6qp.dtsi"
-#include "imx6qdl-nitrogen6_max.dtsi"
+#include "imx6qp-nexo.dtsi"
 
 / {
 	model = "Freescale i.MX6 Quad Plus NEXO Board";
