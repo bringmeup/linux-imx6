@@ -343,7 +343,6 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
 	imx6q-nitrogen6_som2.dtb \
 	imx6q-nitrogen6_som2-ta.dtb \
 	imx6q-nitrogen6x.dtb \
-	imx6q-nexo.dtb \
 	imx6q-nitrogen6x-st7789.dtb \
 	imx6q-nitrogen6x-careview.dtb \
 	imx6q-nw2.dtb \
@@ -358,6 +357,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
 	imx6q-sabreauto-gpmi-weim.dtb \
 	imx6qp-mtp.dtb \
 	imx6qp-nitrogen6_max.dtb \
+	imx6qp-nexo.dtb \
 	imx6qp-nitrogen6_som2.dtb \
 	imx6qp-sabreauto.dtb \
 	imx6qp-sabreauto-ecspi.dtb \
