@@ -1361,6 +1361,7 @@
 	non-removable;
 // 	vqmmc-1-8-v;
 // 	vmmc-supply = <&reg_1p8v>;
-	keep-power-in-suspend;
+// 	keep-power-in-suspend;
+	vmmc-supply = <&reg_3p3v>;
 	status = "okay";
 };
