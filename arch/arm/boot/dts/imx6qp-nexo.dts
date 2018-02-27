@@ -42,9 +42,9 @@
 // 	prefetch;
 // };
 
-&ov5640 {
-	ipu_id = <1>;
-};
+// &ov5640 {
+// 	ipu_id = <1>;
+// };
 
 &pinctrl_i2c3_ov5640 { /* parallel camera */
 	fsl,pins = <
