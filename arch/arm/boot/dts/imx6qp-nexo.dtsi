@@ -344,6 +344,13 @@
 		>;
 	};
 
+	pinctrl_reg_lvds_backlight: reg-lvds-backlightgrp {
+		fsl,pins = <
+#define GP_REG_LVDS	<&gpio2 31 GPIO_ACTIVE_HIGH>
+			MX6QDL_PAD_EIM_EB3__GPIO2_IO31		0x030b0
+		>;
+	};
+
 	pinctrl_reg_wlan_en: reg-wlan-engrp {
 		fsl,pins = <
 #define GP_REG_WLAN_EN	<&gpio6 15 GPIO_ACTIVE_HIGH>
@@ -464,7 +471,7 @@
 
 / {
 	aliases {
-		backlight_lcd = &backlight_lcd;
+// 		backlight_lcd = &backlight_lcd;
 		backlight_lvds = &backlight_lvds;
 		backlight_lvds2 = &backlight_lvds2;
 // 		bt_rfkill = &bt_rfkill;
@@ -489,20 +496,21 @@
 		t_lvds2 = &t_lvds2;
 	};
 
-	backlight_lcd: backlight_lcd {
-		brightness-levels = <0 1 2 3 4 5 6 7 8 9 10>;
-		compatible = "pwm-backlight";
-		default-brightness-level = <8>;
-		display = <&fb_lcd>;
+// 	backlight_lcd: backlight_lcd {
+// 		brightness-levels = <0 1 2 3 4 5 6 7 8 9 10>;
+// 		compatible = "pwm-backlight";
+// 		default-brightness-level = <8>;
+// 		display = <&fb_lcd>;
 // 		pwms = <&pwm4 0 5000000>;
-	};
+// 	};
 
 	backlight_lvds: backlight_lvds {
 		brightness-levels = <0 1 2 3 4 5 6 7 8 9 10>;
 		compatible = "pwm-backlight";
 		default-brightness-level = <8>;
 		display = <&fb_lvds>;
-// 		pwms = <&pwm1 0 5000000>;
+		pwms = <&pwm1 0 5000000>;
+		power-supply = <&reg_lvds_backlight>;
 	};
 
 	backlight_lvds2: backlight_lvds2 {
@@ -510,7 +518,8 @@
 		compatible = "pwm-backlight";
 		default-brightness-level = <8>;
 		display = <&fb_lvds2>;
-// 		pwms = <&pwm2 0 5000000>;
+		pwms = <&pwm2 0 5000000>;
+		power-supply = <&reg_lvds_backlight>;
 	};
 
 // 	btwilink {
@@ -563,7 +572,7 @@
 		default_bpp = <24>;
 		int_clk = <0>;
 		late_init = <0>;
-		status = "disabled";
+		status = "okay";
 	};
 
 	fb_lcd: fb@1 {
@@ -579,11 +588,11 @@
 	fb_lvds2: fb@2 {
 		compatible = "fsl,mxc_sdc_fb";
 		disp_dev = "ldb";
-		interface_pix_fmt = "RGB666";
-		default_bpp = <16>;
+		interface_pix_fmt = "RGB24";
+		default_bpp = <24>;
 		int_clk = <0>;
 		late_init = <0>;
-		status = "disabled";
+		status = "okay";
 	};
 
 // 	fb_hdmi: fb@3 {
@@ -699,7 +708,7 @@
 		#clock-cells = <0>;
 		clock-frequency = <22000000>;
 		clock-output-names = "mipi_mclk";
-		pwms = <&pwm3 0 45>; /* 1 / 45 ns = 22 MHz */
+		pwms = <&pwm1 0 45>; /* 1 / 45 ns = 22 MHz */
 	};
 
 	ramoops_device {
@@ -765,6 +774,18 @@
 			regulator-max-microvolt = <3300000>;
 			gpio = GP_REG_WLAN_EN;
 			startup-delay-us = <70000>;
+			enable-active-high;
+		};
+
+		reg_lvds_backlight: regulator@5 {
+			compatible = "regulator-fixed";
+			reg = <5>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&pinctrl_reg_lvds_backlight>;
+			regulator-name = "lvds_backlight";
+			regulator-min-microvolt = <12000000>;
+			regulator-max-microvolt = <12000000>;
+			gpio = GP_REG_LVDS;
 			enable-active-high;
 		};
 	};
