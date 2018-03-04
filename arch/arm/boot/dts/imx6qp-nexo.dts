@@ -34,14 +34,6 @@
 	prefetch;
 };
 
-&fb_lcd {
-	prefetch;
-};
-
-// &fb_hdmi {
-// 	prefetch;
-// };
-
 // &ov5640 {
 // 	ipu_id = <1>;
 // };
