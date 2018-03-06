@@ -275,7 +275,7 @@
 
 	pinctrl_reg_lvds_backlight_enable: reg-lvds-backlight_enablegrp {
 		fsl,pins = <
-#define GP_REG_LVDS_LED_ENABLE	<&gpio1 5 GPIO_ACTIVE_HIGH>
+#define GP_REG_LVDS_LED_ENABLE	<&gpio1 5 GPIO_ACTIVE_LOW>
 			MX6QDL_PAD_GPIO_5__GPIO1_IO05		0x030b0
 		>;
 	};
@@ -460,6 +460,7 @@
 		>;
 	};
 };
+
 
 / {
 	aliases {
@@ -719,11 +720,13 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_reg_lvds_en>;
 			regulator-name = "lvds_enable";
-			regulator-min-microvolt = <2500000>;
-			regulator-max-microvolt = <2500000>;
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
 			gpio = GP_REG_LVDS_ENABLE;
 			enable-active-high;
-			startup-delay-us = <100000>;
+			startup-delay-us = <500000>;
+			regulator-always-on;
+			regulator-boot-on;
 		};
 
 		reg_lvds_backlight_supply: regulator@6 {
@@ -737,7 +740,9 @@
 			gpio = GP_REG_LVDS_LED_SUPPLY;
 			enable-active-high;
 			vin-supply = <&reg_lvds_enable>;
-			startup-delay-us = <100000>;
+			startup-delay-us = <500000>;
+			regulator-always-on;
+			regulator-boot-on;
 		};
 
 		reg_lvds_backlight_enable: regulator@7 {
@@ -751,8 +756,7 @@
 			gpio = GP_REG_LVDS_LED_ENABLE;
 			enable-active-high;
 			vin-supply = <&reg_lvds_backlight_supply>;
-			startup-delay-us = <1000>;
-			regulator-always-on;
+			startup-delay-us = <10000>;
 		};
 
 		reg_dummy1: regulator@8 {
@@ -1169,7 +1173,17 @@
 
 		display-timings {
 			t_lvds: t_lvds_default {
-				clock-frequency = <148500000>;
+// 				clock-frequency = <67599540>;
+// 				hactive = <1920>;
+// 				vactive = <1080>;
+// 				hback-porch = <50>;
+// 				hfront-porch = <50>;
+// 				vback-porch = <10>;
+// 				vfront-porch = <10>;
+// 				hsync-len = <10>;
+// 				vsync-len = <10>;
+
+				clock-frequency = <148500148>;
 				hactive = <1920>;
 				vactive = <1080>;
 				hback-porch = <148>;
