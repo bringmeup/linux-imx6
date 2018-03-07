@@ -82,12 +82,6 @@
 // 		>;
 // 	};
 
-// 	pinctrl_hdmi_cec: hdmi-cecgrp {
-// 		fsl,pins = <
-// 			MX6QDL_PAD_EIM_A25__HDMI_TX_CEC_LINE	0x1f8b0
-// 		>;
-// 	};
-
 	pinctrl_i2c1: i2c1grp {
 		fsl,pins = <
 			MX6QDL_PAD_CSI0_DAT9__I2C1_SCL		0x4001b8b1
@@ -558,42 +552,11 @@
 // 		compatible = "gpio-keys";
 // 		pinctrl-names = "default";
 // 		pinctrl-0 = <&pinctrl_gpio_keys>;
-// 
-// 		back {
-// 			label = "Back";
-// 			gpios = GP_GPIOKEY_BACK;
-// 			linux,code = <KEY_BACK>;
-// 		};
-// 
-// 		home {
-// 			label = "Home";
-// 			gpios = GP_GPIOKEY_HOME;
-// 			linux,code = <KEY_HOMEPAGE>;
-// 		};
-// 
-// 		menu {
-// 			label = "Menu";
-// 			gpios = GP_GPIOKEY_MENU;
-// 			linux,code = <KEY_MENU>;
-// 		};
-// 
 // 		power {
 // 			label = "Power Button";
 // 			gpios = GP_GPIOKEY_POWER;
 // 			linux,code = <KEY_POWER>;	/* or KEY_SEARCH */
 // 			gpio-key,wakeup;
-// 		};
-// 
-// 		volume-down {
-// 			label = "Volume Down";
-// 			gpios = GP_GPIOKEY_VOL_DN;
-// 			linux,code = <KEY_VOLUMEDOWN>;
-// 		};
-// 
-// 		volume-up {
-// 			label = "Volume Up";
-// 			gpios = GP_GPIOKEY_VOL_UP;
-// 			linux,code = <KEY_VOLUMEUP>;
 // 		};
 // 	};
 
@@ -845,13 +808,6 @@
 // 		spk-mute-on-hp-detect;
 // 	};
 
-// 	sound-hdmi {
-// 		compatible = "fsl,imx6q-audio-hdmi",
-// 			     "fsl,imx-audio-hdmi";
-// 		model = "imx-audio-hdmi";
-// 		hdmi-controller = <&hdmi_audio>;
-// 	};
-
 	v4l2_cap_0 {
 		compatible = "fsl,imx6q-v4l2-capture";
 		ipu_id = <0>;
@@ -898,35 +854,6 @@
 // 	status = "okay";
 // };
 
-// &ecspi1 {
-// 	pinctrl-names = "default";
-// 	pinctrl-0 = <&pinctrl_ecspi1>;
-// 	fsl,spi-num-chipselects = <1>;
-// 	cs-gpios = GP_ECSPI1_NOR_CS;
-// 	status = "okay";
-// 
-// 	flash: m25p80@0 {
-// 		compatible = "sst,sst25vf016b";
-// 		spi-max-frequency = <20000000>;
-// 		reg = <0>;
-// 		#address-cells = <1>;
-// 		#size-cells = <1>;
-// 		mtd@00000000 {
-// 			label = "U-Boot";
-// 			reg = <0x0 0xC0000>;
-// 		};
-// 
-// 		mtd@000C0000 {
-// 			label = "env";
-// 			reg = <0xC0000 0x2000>;
-// 		};
-// 		mtd@000C2000 {
-// 			label = "splash";
-// 			reg = <0xC2000 0x13e000>;
-// 		};
-// 	};
-// };
-
 &fec {
 	status = "okay";
 //	interrupts-extended = GPIRQ_ENET,
@@ -951,28 +878,6 @@
 		};
 	};
 };
-
-// &hdmi_audio {
-// 	status = "okay";
-// };
-// 
-// &hdmi_cec {
-// 	pinctrl-names = "default";
-// 	pinctrl-0 = <&pinctrl_hdmi_cec>;
-// 	status = "okay";
-// };
-// 
-// &hdmi_core {
-// 	ipu_id = <1>;
-// 	disp_id = <0>;
-// 	status = "okay";
-// };
-// 
-// &hdmi_video {
-// 	fsl,phy_reg_vlev = <0x0294>;
-// 	fsl,phy_reg_cksymtx = <0x800d>;
-// 	status = "okay";
-// };
 
 &i2c1 {
 	clock-frequency = <100000>;
@@ -1082,50 +987,6 @@
 // 	sda-gpios = GP_I2C3_SDA;
 // 	status = "okay";
 
-// 	atmel_maxtouch@4a {
-// 		compatible = "atmel,maxtouch";
-// 		reg = <0x4a>;
-// 		interrupts-extended = GPIRQ_I2C3_J7;
-// 		wakeup-gpios = GP_I2C3_J7;
-// 		reset-gpios = GP_I2C3_ATMEL_RESET;
-// 	};
-
-// 	egalax_ts@04 {
-// 		compatible = "eeti,egalax_ts";
-// 		reg = <0x04>;
-// 		interrupts-extended = GPIRQ_I2C3_J7;
-// 		wakeup-gpios = GP_I2C3_J7;
-// 	};
-
-// 	ft5x06_ts@38 {
-// 		compatible = "ft5x06-ts";
-// 		reg = <0x38>;
-// 		interrupts-extended = GPIRQ_I2C3_J7;
-// 		wakeup-gpios = GP_I2C3_J7;
-// 	};
-
-// 	gt911@14 {
-// 		compatible = "goodix,gt911";
-// 		pinctrl-names = "default";
-// 		pinctrl-0 = <&pinctrl_i2c3_gt911>;
-// 		reg = <0x14>;
-// 		esd-recovery-timeout-ms = <2000>;
-// 		interrupts-extended = GPIRQ_GT911;
-// 		irq-gpios = GP_GT911_IRQ;
-// 		reset-gpios = GP_GT911_RESET;
-// 	};
-
-// 	gt911@5d {
-// 		compatible = "goodix,gt911";
-// 		pinctrl-names = "default";
-// 		pinctrl-0 = <&pinctrl_i2c3_gt911>;
-// 		reg = <0x5d>;
-// 		esd-recovery-timeout-ms = <2000>;
-// 		interrupts-extended = GPIRQ_GT911;
-// 		irq-gpios = GP_GT911_IRQ;
-// 		reset-gpios = GP_GT911_RESET;
-// 	};
-
 // 	ili210x@41 {
 // 		compatible = "ili210x";
 // 		reg = <0x41>;
@@ -1173,16 +1034,6 @@
 
 		display-timings {
 			t_lvds: t_lvds_default {
-// 				clock-frequency = <67599540>;
-// 				hactive = <1920>;
-// 				vactive = <1080>;
-// 				hback-porch = <50>;
-// 				hfront-porch = <50>;
-// 				vback-porch = <10>;
-// 				vfront-porch = <10>;
-// 				hsync-len = <10>;
-// 				vsync-len = <10>;
-
 				clock-frequency = <148500148>;
 				hactive = <1920>;
 				vactive = <1080>;
