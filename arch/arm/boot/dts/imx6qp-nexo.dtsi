@@ -253,26 +253,26 @@
 		>;
 	};
 
-	pinctrl_reg_lvds_en: reg-lvds-engrp {
-		fsl,pins = <
-#define GP_REG_LVDS_ENABLE	<&gpio5 20 GPIO_ACTIVE_HIGH>
-			MX6QDL_PAD_CSI0_DATA_EN__GPIO5_IO20		0x030b0
-		>;
-	};
+// 	pinctrl_reg_lvds_en: reg-lvds-engrp {
+// 		fsl,pins = <
+// #define GP_REG_LVDS_ENABLE	<&gpio5 20 GPIO_ACTIVE_HIGH>
+// 			MX6QDL_PAD_CSI0_DATA_EN__GPIO5_IO20		0x030b0
+// 		>;
+// 	};
 
-	pinctrl_reg_lvds_backlight_supply: reg-lvds-backlight_supplygrp {
-		fsl,pins = <
-#define GP_REG_LVDS_LED_SUPPLY	<&gpio2 31 GPIO_ACTIVE_HIGH>
-			MX6QDL_PAD_EIM_EB3__GPIO2_IO31		0x030b0
-		>;
-	};
-
-	pinctrl_reg_lvds_backlight_enable: reg-lvds-backlight_enablegrp {
-		fsl,pins = <
-#define GP_REG_LVDS_LED_ENABLE	<&gpio1 5 GPIO_ACTIVE_LOW>
-			MX6QDL_PAD_GPIO_5__GPIO1_IO05		0x030b0
-		>;
-	};
+// 	pinctrl_reg_lvds_backlight_supply: reg-lvds-backlight_supplygrp {
+// 		fsl,pins = <
+// #define GP_REG_LVDS_LED_SUPPLY	<&gpio2 31 GPIO_ACTIVE_HIGH>
+// 			MX6QDL_PAD_EIM_EB3__GPIO2_IO31		0x030b0
+// 		>;
+// 	};
+// 
+// 	pinctrl_reg_lvds_backlight_enable: reg-lvds-backlight_enablegrp {
+// 		fsl,pins = <
+// #define GP_REG_LVDS_LED_ENABLE	<&gpio1 5 GPIO_ACTIVE_LOW>
+// 			MX6QDL_PAD_GPIO_5__GPIO1_IO05		0x030b0
+// 		>;
+// 	};
 
 	pinctrl_dummy1: reg-dummygrp1 {
 		fsl,pins = <
@@ -480,7 +480,7 @@
 		default-brightness-level = <8>;
 		display = <&fb_lvds>;
 		pwms = <&pwm1 0 5000000>;
-		power-supply = <&reg_lvds_backlight_enable>;
+// 		power-supply = <&reg_lvds_backlight_enable>;
 	};
 
 
@@ -677,50 +677,47 @@
 			enable-active-high;
 		};
 
-		reg_lvds_enable: regulator@5 {
-			compatible = "regulator-fixed";
-			reg = <5>;
-			pinctrl-names = "default";
-			pinctrl-0 = <&pinctrl_reg_lvds_en>;
-			regulator-name = "lvds_enable";
-			regulator-min-microvolt = <3300000>;
-			regulator-max-microvolt = <3300000>;
-			gpio = GP_REG_LVDS_ENABLE;
-			enable-active-high;
-			startup-delay-us = <500000>;
-			regulator-always-on;
-			regulator-boot-on;
-		};
+// 		reg_lvds_enable: regulator@5 {
+// 			compatible = "regulator-fixed";
+// 			reg = <5>;
+// 			pinctrl-names = "default";
+// 			pinctrl-0 = <&pinctrl_reg_lvds_en>;
+// 			regulator-name = "lvds_enable";
+// 			regulator-min-microvolt = <3300000>;
+// 			regulator-max-microvolt = <3300000>;
+// 			gpio = GP_REG_LVDS_ENABLE;
+// 			enable-active-high;
+// 			startup-delay-us = <900000>;
+// 			regulator-always-on;
+// // 			regulator-boot-on;
+// 		};
 
-		reg_lvds_backlight_supply: regulator@6 {
-			compatible = "regulator-fixed";
-			reg = <6>;
-			pinctrl-names = "default";
-			pinctrl-0 = <&pinctrl_reg_lvds_backlight_supply>;
-			regulator-name = "lvds_backlight_supply";
-			regulator-min-microvolt = <12000000>;
-			regulator-max-microvolt = <12000000>;
-			gpio = GP_REG_LVDS_LED_SUPPLY;
-			enable-active-high;
-			vin-supply = <&reg_lvds_enable>;
-			startup-delay-us = <500000>;
-			regulator-always-on;
-			regulator-boot-on;
-		};
-
-		reg_lvds_backlight_enable: regulator@7 {
-			compatible = "regulator-fixed";
-			reg = <7>;
-			pinctrl-names = "default";
-			pinctrl-0 = <&pinctrl_reg_lvds_backlight_enable>;
-			regulator-name = "lvds_backlight_enable";
-			regulator-min-microvolt = <2500000>;
-			regulator-max-microvolt = <2500000>;
-			gpio = GP_REG_LVDS_LED_ENABLE;
-			enable-active-high;
-			vin-supply = <&reg_lvds_backlight_supply>;
-			startup-delay-us = <10000>;
-		};
+// 		reg_lvds_backlight_supply: regulator@6 {
+// 			compatible = "regulator-fixed";
+// 			reg = <6>;
+// 			pinctrl-names = "default";
+// 			pinctrl-0 = <&pinctrl_reg_lvds_backlight_supply>;
+// 			regulator-name = "lvds_backlight_supply";
+// 			regulator-min-microvolt = <12000000>;
+// 			regulator-max-microvolt = <12000000>;
+// 			gpio = GP_REG_LVDS_LED_SUPPLY;
+// 			enable-active-high;
+// // 			vin-supply = <&reg_lvds_enable>;
+// 			startup-delay-us = <2000000>;
+// 		};
+// 
+// 		reg_lvds_backlight_enable: regulator@7 {
+// 			compatible = "regulator-fixed";
+// 			reg = <7>;
+// 			pinctrl-names = "default";
+// 			pinctrl-0 = <&pinctrl_reg_lvds_backlight_enable>;
+// 			regulator-name = "lvds_backlight_enable";
+// 			regulator-min-microvolt = <2500000>;
+// 			regulator-max-microvolt = <2500000>;
+// 			gpio = GP_REG_LVDS_LED_ENABLE;
+// 			enable-active-high;
+// 			vin-supply = <&reg_lvds_backlight_supply>;
+// 		};
 
 		reg_dummy1: regulator@8 {
 			compatible = "regulator-fixed";
