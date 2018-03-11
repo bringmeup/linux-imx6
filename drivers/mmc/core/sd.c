@@ -778,6 +778,13 @@ try_again:
 			retries = 0;
 			goto try_again;
 		}
+	} else {
+		if (rocr) {
+			int ccs = !!(*rocr & 0x40000000);
+			int s18a = !!(*rocr & 0x01000000);
+			pr_notice("%s: 1v8 not enabled, card replied with CCS=%d S18A=%d\n",
+					mmc_hostname(host), ccs, s18a);
+		}
 	}
 
 	if (mmc_host_is_spi(host))

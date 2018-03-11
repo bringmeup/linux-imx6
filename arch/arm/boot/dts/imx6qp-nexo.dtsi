@@ -267,40 +267,20 @@
 		>;
 	};
 
-	pinctrl_dummy1: reg-dummygrp1 {
-		fsl,pins = <
-#define GP_REG_DUMMY1	<&gpio1 6 GPIO_ACTIVE_LOW>
-			MX6QDL_PAD_GPIO_6__GPIO1_IO06		0x030b0
-		>;
-	};
-
-	pinctrl_dummy2: reg-dummygrp2 {
-		fsl,pins = <
-#define GP_REG_DUMMY2	<&gpio1 7 GPIO_ACTIVE_LOW>
-			MX6QDL_PAD_GPIO_7__GPIO1_IO07		0x030b0
-		>;
-	};
-
 	// this is the group that is always 'active'
 	pinctrl_hog: hoggrp {
-		fsl,pins = <
-				MX6QDL_PAD_KEY_COL1__SD1_VSELECT	0x100b0		/* sd1 voltage select */
-				MX6QDL_PAD_NANDF_CS1__SD3_VSELECT	0x100b0		/* sd3 voltage select */
-		>;
+// 		fsl,pins = <
+// 				MX6QDL_PAD_KEY_COL1__SD1_VSELECT	0x100b0		/* sd1 voltage select */
+// 				MX6QDL_PAD_NANDF_CS1__SD3_VSELECT	0x100b0		/* sd3 voltage select */
+// 		>;
 	};
 
-// 	pinctrl_reg_sd1: reg-sd1-grp {
-// 		fsl,pins = <
-// #define GP_REG_SD1_VSELECT	<&gpio4 8  GPIO_ACTIVE_LOW>
-// 			MX6QDL_PAD_KEY_COL1__GPIO4_IO08		0x030b0		/* sd1 voltage select */
-// 		>;
-// 	};
-
-// 	pinctrl_reg_sd3: reg-sd3-grp {
-// 		fsl,pins = <
-// #define GP_REG_SD3_VSELECT	<&gpio6 14 GPIO_ACTIVE_LOW>
-// 			MX6QDL_PAD_NANDF_CS1__GPIO6_IO14	0x030b0		/* sd3 voltage select */
-// 	};
+	pinctrl_reg_sd3: reg-sd3-grp {
+		fsl,pins = <
+#define GP_SD3_RESET	<&gpio7 8 GPIO_ACTIVE_HIGH>
+			MX6QDL_PAD_SD3_RST__GPIO7_IO08	0x030b0
+		>;
+	};
 
 	pinctrl_uart1: uart1grp {
 		fsl,pins = <
@@ -389,6 +369,7 @@
 			MX6QDL_PAD_SD3_DAT1__SD3_DATA1		0x17059
 			MX6QDL_PAD_SD3_DAT2__SD3_DATA2		0x17059
 			MX6QDL_PAD_SD3_DAT3__SD3_DATA3		0x17059
+			MX6QDL_PAD_NANDF_CS1__SD3_VSELECT	0x100b0		/* sd3 voltage select */
 		>;
 	};
 
@@ -422,6 +403,7 @@
 			MX6QDL_PAD_SD1_DAT1__SD1_DATA1		0x17059
 			MX6QDL_PAD_SD1_DAT2__SD1_DATA2		0x17059
 			MX6QDL_PAD_SD1_DAT3__SD1_DATA3		0x17059
+			MX6QDL_PAD_KEY_COL1__SD1_VSELECT	0x100b0		/* sd1 voltage select */
 		>;
 	};
 	
@@ -696,37 +678,17 @@
 			vin-supply = <&reg_lvds_backlight_supply>;
 		};
 
-// 		reg_usdhc1: regulator@10 {
-// 			compatible = "regulator-gpio";
-// 			reg = <10>;
-// 			regulator-name = "usdhc1_regulator";
-// 			regulator-min-microvolt = <1800000>;
-// 			regulator-max-microvolt = <3300000>;
-// 
-// 			pinctrl-names = "default";
-// 			pinctrl-0 = <&pinctrl_reg_sd1>;
-// 			gpios = GP_REG_SD1_VSELECT;
-// 			states = <1800000 0x1
-// 					  3300000 0x0>;
-// 
-// 			startup-delay-us = <1000>;
-// 		};
-// 
-// 		reg_usdhc3: regulator@11 {
-// 			compatible = "regulator-gpio";
-// 			reg = <11>;
-// 			regulator-name = "usdhc3_regulator";
-// 			regulator-min-microvolt = <1800000>;
-// 			regulator-max-microvolt = <3300000>;
-// 
-// 			pinctrl-names = "default";
-// 			pinctrl-0 = <&pinctrl_reg_sd3>;
-// 			gpios = GP_REG_SD3_VSELECT;
-// 			states = <1800000 0x1
-// 					  3300000 0x0>;
-// 
-// 			startup-delay-us = <1000>;
-// 		};
+		reg_usdhc3: regulator@7 {
+			compatible = "regulator-fixed";
+			reg = <7>;
+			regulator-name = "usdhc3_regulator";
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+			enable-active-high;
+			pinctrl-names = "default";
+			pinctrl-0 = <&pinctrl_reg_sd3>;
+			gpios = GP_SD3_RESET;
+		};
 	};
 
 // 	sound {
@@ -1122,8 +1084,7 @@
 	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
 	pinctrl-3 = <&pinctrl_usdhc3_50mhz>;
 	bus-width = <4>;
-	vmmc-supply = <&reg_3p3v>;
-// 	vqmmc-supply = <&reg_usdhc3>;
+ 	vmmc-supply = <&reg_usdhc3>;
 	non-removable;
 	status = "okay";
 };
@@ -1135,8 +1096,7 @@
 	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
 	pinctrl-3 = <&pinctrl_usdhc1_50mhz>;
 	bus-width = <4>;
-	vmmc-supply = <&reg_3p3v>;
-// 	vqmmc-supply = <&reg_usdhc1>;
+//  	vmmc-supply = <&reg_usdhc1>;
 	non-removable;
 	status = "okay";
 };
