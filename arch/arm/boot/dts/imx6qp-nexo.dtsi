@@ -282,6 +282,13 @@
 		>;
 	};
 
+	pinctrl_reg_wlan_en: reg-wlan-grp {
+		fsl,pins = <
+#define GP_REG_WLAN_EN	<&gpio6 8 GPIO_ACTIVE_HIGH>
+			MX6QDL_PAD_NANDF_ALE__GPIO6_IO08	0x030b0
+		>;
+	};
+
 	pinctrl_uart1: uart1grp {
 		fsl,pins = <
 			MX6QDL_PAD_SD3_DAT7__UART1_TX_DATA	0x1b0b1
@@ -325,41 +332,41 @@
 		>;
 	};
 
-// 	pinctrl_usdhc2: usdhc2grp {
-// 		fsl,pins = <
-// 			MX6QDL_PAD_SD2_CLK__SD2_CLK		0x10071
-// 			MX6QDL_PAD_SD2_CMD__SD2_CMD		0x17071
-// 			MX6QDL_PAD_SD2_DAT0__SD2_DATA0		0x17071
-// 			MX6QDL_PAD_SD2_DAT1__SD2_DATA1		0x17071
-// 			MX6QDL_PAD_SD2_DAT2__SD2_DATA2		0x17071
-// 			MX6QDL_PAD_SD2_DAT3__SD2_DATA3		0x17071
-// 			MX6QDL_PAD_SD1_CLK__OSC32K_32K_OUT	0x000b0		/* slow clock */
-// #define GPIRQ_WL1271	<&gpio6 11 IRQ_TYPE_LEVEL_HIGH>
-// 			MX6QDL_PAD_NANDF_CS0__GPIO6_IO11	0x100b0
-// 		>;
-// 	};
+	pinctrl_usdhc4_50mhz: usdhc4grp {
+		fsl,pins = <
+			MX6QDL_PAD_SD4_CLK__SD4_CLK		0x10071
+			MX6QDL_PAD_SD4_CMD__SD4_CMD		0x17071
+			MX6QDL_PAD_SD4_DAT0__SD4_DATA0		0x17071
+			MX6QDL_PAD_SD4_DAT1__SD4_DATA1		0x17071
+			MX6QDL_PAD_SD4_DAT2__SD4_DATA2		0x17071
+			MX6QDL_PAD_SD4_DAT3__SD4_DATA3		0x17071
+			MX6QDL_PAD_ENET_RXD0__OSC32K_32K_OUT	0x000b0		/* slow clock */
+#define GPIRQ_CBM283	<&gpio2 0 IRQ_TYPE_LEVEL_HIGH>
+			MX6QDL_PAD_NANDF_D0__GPIO2_IO00	0x100b0
+		>;
+	};
 
-// 	pinctrl_usdhc2_100mhz: usdhc2grp-100mhz {
-// 		fsl,pins = <
-// 			MX6QDL_PAD_SD2_CMD__SD2_CMD		0x170B9
-// 			MX6QDL_PAD_SD2_CLK__SD2_CLK		0x100B9
-// 			MX6QDL_PAD_SD2_DAT0__SD2_DATA0		0x170B9
-// 			MX6QDL_PAD_SD2_DAT1__SD2_DATA1 		0x170B9
-// 			MX6QDL_PAD_SD2_DAT2__SD2_DATA2 		0x170B9
-// 			MX6QDL_PAD_SD2_DAT3__SD2_DATA3 		0x170B9
-// 		>;
-// 	};
-// 
-// 	pinctrl_usdhc2_200mhz: usdhc2grp-200mhz {
-// 		fsl,pins = <
-// 			MX6QDL_PAD_SD2_CMD__SD2_CMD		0x170F9
-// 			MX6QDL_PAD_SD2_CLK__SD2_CLK 		0x100F9
-// 			MX6QDL_PAD_SD2_DAT0__SD2_DATA0		0x170F9
-// 			MX6QDL_PAD_SD2_DAT1__SD2_DATA1 		0x170F9
-// 			MX6QDL_PAD_SD2_DAT2__SD2_DATA2 		0x170F9
-// 			MX6QDL_PAD_SD2_DAT3__SD2_DATA3 		0x170F9
-// 		>;
-// 	};
+	pinctrl_usdhc4_100mhz: usdhc4grp-100mhz {
+		fsl,pins = <
+			MX6QDL_PAD_SD4_CMD__SD4_CMD		0x170B9
+			MX6QDL_PAD_SD4_CLK__SD4_CLK		0x100B9
+			MX6QDL_PAD_SD4_DAT0__SD4_DATA0		0x170B9
+			MX6QDL_PAD_SD4_DAT1__SD4_DATA1 		0x170B9
+			MX6QDL_PAD_SD4_DAT2__SD4_DATA2 		0x170B9
+			MX6QDL_PAD_SD4_DAT3__SD4_DATA3 		0x170B9
+		>;
+	};
+
+	pinctrl_usdhc4_200mhz: usdhc4grp-200mhz {
+		fsl,pins = <
+			MX6QDL_PAD_SD4_CMD__SD4_CMD		0x170F9
+			MX6QDL_PAD_SD4_CLK__SD4_CLK 		0x100F9
+			MX6QDL_PAD_SD4_DAT0__SD4_DATA0		0x170F9
+			MX6QDL_PAD_SD4_DAT1__SD4_DATA1 		0x170F9
+			MX6QDL_PAD_SD4_DAT2__SD4_DATA2 		0x170F9
+			MX6QDL_PAD_SD4_DAT3__SD4_DATA3 		0x170F9
+		>;
+	};
 
 	pinctrl_usdhc3_50mhz: usdhc3grp-50mhz {
 		fsl,pins = <
@@ -441,7 +448,7 @@
 		ldb = &ldb;
 		mmc0 = &usdhc3;
 		mmc1 = &usdhc1;
-// 		mmc2 = &usdhc2;
+ 		mmc2 = &usdhc4;
 		mxcfb1 = &fb_lvds;
 		mxcfb3 = &fb_lvds2;
 		pwm_lvds = &pwm1;
@@ -667,7 +674,7 @@
 
 		reg_lvds_backlight_enable: regulator@6 {
 			compatible = "regulator-fixed";
-			reg = <7>;
+			reg = <6>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_reg_lvds_backlight_enable>;
 			regulator-name = "lvds_backlight_enable";
@@ -688,6 +695,19 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_reg_sd3>;
 			gpios = GP_SD3_RESET;
+		};
+
+		reg_wlan_en: regulator@8 {
+			compatible = "regulator-fixed";
+			reg = <8>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&pinctrl_reg_wlan_en>;
+			regulator-name = "wlan-en";
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+			gpios = GP_REG_WLAN_EN;
+			startup-delay-us = <70000>;
+			enable-active-high;
 		};
 	};
 
@@ -1054,28 +1074,28 @@
 	status = "okay";
 };
 
-// &usdhc2 {	/* uSDHC2, TiWi wl1271 */
-// 	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-// 	pinctrl-0 = <&pinctrl_usdhc2>;
-// 	pinctrl-1 = <&pinctrl_usdhc2_100mhz>;
-// 	pinctrl-2 = <&pinctrl_usdhc2_200mhz>;
-// 	bus-width = <4>;
-// 	non-removable;
-// 	vmmc-supply = <&reg_wlan_en>;
-// 	vqmmc-1-8-v;
-// 	cap-power-off-card;
-// 	keep-power-in-suspend;
-// 	status = "okay";
-// 
-// 	#address-cells = <1>;
-// 	#size-cells = <0>;
-// 	wlcore: wlcore@2 {
-// 		compatible = "ti,wl1271";
-// 		interrupts-extended = GPIRQ_WL1271;
-// 		reg = <2>;
-// 		ref-clock-frequency = <38400000>;
-// 	};
-// };
+ &usdhc4 {	/* uSDHC4, CBM283IQ2B */
+	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+	pinctrl-0 = <&pinctrl_usdhc4_50mhz>;
+	pinctrl-1 = <&pinctrl_usdhc4_100mhz>;
+	pinctrl-2 = <&pinctrl_usdhc4_200mhz>;
+	bus-width = <4>;
+	non-removable;
+	vmmc-supply = <&reg_wlan_en>;
+	vqmmc-1-8-v;
+	cap-power-off-card;
+	keep-power-in-suspend;
+	status = "okay";
+
+	#address-cells = <1>;
+	#size-cells = <0>;
+	wlcore: wlcore@2 {
+		compatible = "ti,wl1283";
+		interrupts-extended = GPIRQ_CBM283;
+		reg = <2>;
+		ref-clock-frequency = <38400000>;
+	};
+};
 
 &usdhc3 {
 	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
