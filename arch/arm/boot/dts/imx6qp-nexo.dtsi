@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2015 Boundary Devices, Inc.
  * Copyright 2012 Freescale Semiconductor, Inc.
  * Copyright 2011 Linaro Ltd.
@@ -174,27 +174,24 @@
 // 		>;
 // 	};
 
-// 	pinctrl_i2c3: i2c3grp {
-// 		fsl,pins = <
-// 			MX6QDL_PAD_GPIO_5__I2C3_SCL		0x4001b8b1
-// 			MX6QDL_PAD_GPIO_16__I2C3_SDA		0x4001b8b1
-// #define GPIRQ_I2C3_J7	<&gpio1 9 IRQ_TYPE_EDGE_FALLING>
-// #define GP_I2C3_J7	<&gpio1 9 GPIO_ACTIVE_LOW>
-// 			MX6QDL_PAD_GPIO_9__GPIO1_IO09		0x1b0b0		/* I2C3 J7 interrupt */
-// #define GP_I2C3_ATMEL_RESET	<&gpio1 8 GPIO_ACTIVE_LOW>
-// 			MX6QDL_PAD_GPIO_8__GPIO1_IO08		0x130b0
-// 		>;
-// 	};
-
-	pinctrl_i2c3_1: i2c3_1grp {
+	pinctrl_i2c3: i2c3grp {
 		fsl,pins = <
-#define GP_I2C3_SCL	<&gpio1 5 GPIO_ACTIVE_HIGH>
-			MX6QDL_PAD_GPIO_5__GPIO1_IO05		0x4001b8b1
-#define GP_I2C3_SDA	<&gpio7 11 GPIO_ACTIVE_HIGH>
-			MX6QDL_PAD_GPIO_16__GPIO7_IO11		0x4001b8b1
+			MX6QDL_PAD_EIM_D17__I2C3_SCL		0x4001b8b1
+			MX6QDL_PAD_EIM_D18__I2C3_SDA		0x4001b8b1
 		>;
 	};
 
+	pinctrl_i2c3_1: i2c3_1grp {
+		fsl,pins = <
+#define GP_I2C3_SCL	<&gpio3 17 GPIO_ACTIVE_HIGH>
+			MX6QDL_PAD_EIM_D17__GPIO3_IO17		0x4001b8b1
+#define GP_I2C3_SDA	<&gpio3 16 GPIO_ACTIVE_HIGH>
+			MX6QDL_PAD_EIM_D16__GPIO3_IO16		0x4001b8b1
+		>;
+	};
+
+// I'm consider if this is mandatory and If mandatory is to have to IO controls "default"
+// and GPIO. Probably default one is enought, but let's keep it for a while.
 	pinctrl_i2c3mux: i2c3muxgrp {
 		fsl,pins = <
 #define GP_I2C3MUX_A	<&gpio2 25 GPIO_ACTIVE_HIGH>
@@ -225,13 +222,13 @@
 		>;
 	};
 
-	pinctrl_i2c3_tsc2004: i2c3-tsc2004grp {
-		fsl,pins = <
-#define GPIRQ_TSC2004		<&gpio4 20 IRQ_TYPE_EDGE_FALLING>
-#define GP_TSC2004		<&gpio4 20 GPIO_ACTIVE_LOW>
-			MX6QDL_PAD_DI0_PIN4__GPIO4_IO20		0x1b0b0		/* tsc2004 interrupt */
-		>;
-	};
+//	pinctrl_i2c3_tsc2004: i2c3-tsc2004grp {
+//		fsl,pins = <
+//#define GPIRQ_TSC2004		<&gpio4 20 IRQ_TYPE_EDGE_FALLING>
+//#define GP_TSC2004		<&gpio4 20 GPIO_ACTIVE_LOW>
+//			MX6QDL_PAD_DI0_PIN4__GPIO4_IO20		0x1b0b0		/* tsc2004 interrupt */
+//		>;
+//	};
 
 	pinctrl_pwm1: pwm1grp {
 		fsl,pins = <
@@ -711,12 +708,11 @@
 		};
 	};
 
-// 	sound {
-// 		compatible = "fsl,imx6q-nitrogen6_max-sgtl5000",
-// 			     "fsl,imx-audio-sgtl5000";
-// 		model = "sgtl5000-audio";
+	sound {
+		compatible = "fsl,imx6q-nexo-max98091";
+		model = "max98091-audio";
 // 		ssi-controller = <&ssi1>;
-// 		audio-codec = <&sgtl5000>;
+		audio-codec = <&max98091>;
 // 		audio-routing =
 // 			"MIC_IN", "Mic Jack",
 // 			"Mic Jack", "Mic Bias",
@@ -731,7 +727,7 @@
 // 		 * when hp jack detected
 // 		 */
 // 		spk-mute-on-hp-detect;
-// 	};
+	};
 
 	v4l2_cap_0 {
 		compatible = "fsl,imx6q-v4l2-capture";
@@ -903,14 +899,25 @@
 // 	};
 // };
 
-// &i2c3 {
-// 	clock-frequency = <100000>;
-// 	pinctrl-names = "default", "gpio";
-// 	pinctrl-0 = <&pinctrl_i2c3>;
-// 	pinctrl-1 = <&pinctrl_i2c3_1>;
-// 	scl-gpios = GP_I2C3_SCL;
-// 	sda-gpios = GP_I2C3_SDA;
-// 	status = "okay";
+&i2c3 {
+	clock-frequency = <100000>;
+	pinctrl-names = "default", "gpio";
+	pinctrl-0 = <&pinctrl_i2c3>;
+	pinctrl-1 = <&pinctrl_i2c3_1>;
+	scl-gpios = GP_I2C3_SCL;
+	sda-gpios = GP_I2C3_SDA;
+	status = "okay";
+
+	max98091: codec@10 {
+		compatible = "maxim,max98091";
+//		reg = <0x10>;
+//		interrupts = <2 0>;
+//		interrupt-parent = <&gpx0>;
+//		pinctrl-names = "default";
+//		pinctrl-0 = <&max98090_irq>;
+//		clocks = <&pmu_system_controller 0>;
+//		clock-names = "mclk";
+	};
 
 // 	ili210x@41 {
 // 		compatible = "ili210x";
@@ -944,7 +951,7 @@
 // 		interrupts-extended = GPIRQ_TSC2004;
 // 		wakeup-gpios = GP_TSC2004;
 // 	};
-// };
+};
 
 &ldb {
 	split-mode = <1>;
