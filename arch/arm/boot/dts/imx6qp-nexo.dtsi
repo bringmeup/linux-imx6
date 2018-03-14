@@ -279,6 +279,14 @@
 		>;
 	};
 
+	pinctrl_reg_touch_en: reg-touch-grp {
+		fsl,pins = <
+#define GP_REG_TOUCH_EN	<&gpio4 26 GPIO_ACTIVE_LOW>
+			MX6QDL_PAD_DISP0_DAT5__GPIO4_IO26        0x030b0
+		>;
+	};
+
+
 	pinctrl_reg_wlan_en: reg-wlan-grp {
 		fsl,pins = <
 #define GP_REG_WLAN_EN	<&gpio6 8 GPIO_ACTIVE_HIGH>
@@ -658,7 +666,7 @@
 
 		reg_lvds_backlight_supply: regulator@5 {
 			compatible = "regulator-fixed";
-			reg = <6>;
+			reg = <5>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_reg_lvds_backlight_supply>;
 			regulator-name = "lvds_backlight_supply";
@@ -667,6 +675,7 @@
 			gpio = GP_REG_LVDS_LED_SUPPLY;
 			enable-active-high;
 			startup-delay-us = <2000000>;
+			vin-supply = <&reg_wlan_en>;
 		};
 
 		reg_lvds_backlight_enable: regulator@6 {
@@ -705,6 +714,21 @@
 			gpios = GP_REG_WLAN_EN;
 			startup-delay-us = <70000>;
 			enable-active-high;
+			regulator-always-on;
+			vin-supply = <&reg_touch_en>;
+		};
+
+		reg_touch_en: regulator@9 {
+			compatible = "regulator-fixed";
+			reg = <9>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&pinctrl_reg_touch_en>;
+			regulator-name = "touch-en";
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+			gpios = GP_REG_TOUCH_EN;
+			startup-delay-us = <70000>;
+			regulator-always-on;
 		};
 	};
 
