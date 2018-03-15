@@ -35,6 +35,12 @@
 #define PAD_CTL_SRE_FAST                (1 << 0)
 #define PAD_CTL_SRE_SLOW                (0 << 0)
 
+//#define PAD_MODE_USDHC4_50mhz  (PAD_CTL_SRE_SLOW | PAD_CTL_DSE_40ohm | PAD_CTL_SPEED_LOW | PAD_CTL_PKE | PAD_CTL_PUE | PAD_CTL_HYS | PAD_CTL_PUS_47K_UP)
+#define PAD_MODE_USDHC4_50mhz  (PAD_CTL_SRE_SLOW | PAD_CTL_DSE_40ohm | PAD_CTL_SPEED_LOW | PAD_CTL_PKE | PAD_CTL_PUE | PAD_CTL_HYS | PAD_CTL_PUS_22K_UP)
+#define PAD_MODE_USDHC3_50mhz  (PAD_CTL_SRE_SLOW | PAD_CTL_DSE_80ohm | PAD_CTL_SPEED_LOW | PAD_CTL_PKE | PAD_CTL_PUE | PAD_CTL_HYS | PAD_CTL_PUS_47K_UP)
+
+
+
 &iomuxc {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog>;
@@ -368,11 +374,11 @@
 	pinctrl_usdhc4_50mhz: usdhc4grp {
 		fsl,pins = <
 			MX6QDL_PAD_SD4_CLK__SD4_CLK		0x10071
-			MX6QDL_PAD_SD4_CMD__SD4_CMD		0x17071
-			MX6QDL_PAD_SD4_DAT0__SD4_DATA0		0x17071
-			MX6QDL_PAD_SD4_DAT1__SD4_DATA1		0x17071
-			MX6QDL_PAD_SD4_DAT2__SD4_DATA2		0x17071
-			MX6QDL_PAD_SD4_DAT3__SD4_DATA3		0x17071
+			MX6QDL_PAD_SD4_CMD__SD4_CMD		PAD_MODE_USDHC4_50mhz
+			MX6QDL_PAD_SD4_DAT0__SD4_DATA0		PAD_MODE_USDHC4_50mhz
+			MX6QDL_PAD_SD4_DAT1__SD4_DATA1		PAD_MODE_USDHC4_50mhz
+			MX6QDL_PAD_SD4_DAT2__SD4_DATA2		PAD_MODE_USDHC4_50mhz
+			MX6QDL_PAD_SD4_DAT3__SD4_DATA3		PAD_MODE_USDHC4_50mhz
 			MX6QDL_PAD_ENET_RXD0__OSC32K_32K_OUT	0x000b0		/* slow clock */
 #define GPIRQ_CBM283	<&gpio2 0 IRQ_TYPE_LEVEL_HIGH>
 			MX6QDL_PAD_NANDF_D0__GPIO2_IO00	0x100b0
@@ -737,8 +743,8 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_reg_wlan_en>;
 			regulator-name = "wlan-en";
-			regulator-min-microvolt = <1800000>;
-			regulator-max-microvolt = <1800000>;
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
 			gpio = GP_REG_WLAN_EN;
 			startup-delay-us = <70000>;
 			enable-active-high;
@@ -1153,14 +1159,14 @@
 	status = "okay";
 };
 
- &usdhc4 {	/* uSDHC4, CBM283IQ2B */
+&usdhc4 {	/* uSDHC4, CBM283IQ2B */
 	pinctrl-names = "default", "state_100mhz", "state_200mhz";
 	pinctrl-0 = <&pinctrl_usdhc4_50mhz>;
 	pinctrl-1 = <&pinctrl_usdhc4_100mhz>;
 	pinctrl-2 = <&pinctrl_usdhc4_200mhz>;
 	bus-width = <4>;
-	non-removable;
 	vmmc-supply = <&reg_wlan_en>;
+	non-removable;
 	vqmmc-1-8-v;
 	cap-power-off-card;
 	keep-power-in-suspend;
