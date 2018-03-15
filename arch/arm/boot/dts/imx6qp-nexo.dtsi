@@ -13,6 +13,28 @@
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
 
+#define PAD_CTL_HYS                     (1 << 16)
+#define PAD_CTL_PUS_100K_DOWN           (0 << 14)
+#define PAD_CTL_PUS_47K_UP              (1 << 14)
+#define PAD_CTL_PUS_100K_UP             (2 << 14)
+#define PAD_CTL_PUS_22K_UP              (3 << 14)
+#define PAD_CTL_PUE                     (1 << 13)
+#define PAD_CTL_PKE                     (1 << 12)
+#define PAD_CTL_ODE                     (1 << 11)
+#define PAD_CTL_SPEED_LOW               (1 << 6)
+#define PAD_CTL_SPEED_MED               (2 << 6)
+#define PAD_CTL_SPEED_HIGH              (3 << 6)
+#define PAD_CTL_DSE_DISABLE             (0 << 3)
+#define PAD_CTL_DSE_240ohm              (1 << 3)
+#define PAD_CTL_DSE_120ohm              (2 << 3)
+#define PAD_CTL_DSE_80ohm               (3 << 3)
+#define PAD_CTL_DSE_60ohm               (4 << 3)
+#define PAD_CTL_DSE_48ohm               (5 << 3)
+#define PAD_CTL_DSE_40ohm               (6 << 3)
+#define PAD_CTL_DSE_34ohm               (7 << 3)
+#define PAD_CTL_SRE_FAST                (1 << 0)
+#define PAD_CTL_SRE_SLOW                (0 << 0)
+
 &iomuxc {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog>;
@@ -266,10 +288,10 @@
 
 	// this is the group that is always 'active'
 	pinctrl_hog: hoggrp {
-// 		fsl,pins = <
-// 				MX6QDL_PAD_KEY_COL1__SD1_VSELECT	0x100b0		/* sd1 voltage select */
-// 				MX6QDL_PAD_NANDF_CS1__SD3_VSELECT	0x100b0		/* sd3 voltage select */
-// 		>;
+//		fsl,pins = <
+//			MX6QDL_PAD_KEY_COL1__SD1_VSELECT	0x100b0		/* sd1 voltage select */
+//			MX6QDL_PAD_NANDF_CS1__SD3_VSELECT	0x100b0		/* sd3 voltage select */
+//		>;
 	};
 
 	pinctrl_reg_sd3: reg-sd3-grp {
@@ -286,11 +308,17 @@
 		>;
 	};
 
-
 	pinctrl_reg_wlan_en: reg-wlan-grp {
 		fsl,pins = <
 #define GP_REG_WLAN_EN	<&gpio6 8 GPIO_ACTIVE_HIGH>
-			MX6QDL_PAD_NANDF_ALE__GPIO6_IO08	0x030b0
+			MX6QDL_PAD_NANDF_ALE__GPIO6_IO08	(PAD_CTL_DSE_40ohm | PAD_CTL_SPEED_MED | PAD_CTL_PKE | PAD_CTL_PUE)
+		>;
+	};
+
+	pinctrl_reg_bt_en: reg-bt-grp {
+		fsl,pins = <
+#define GP_REG_BT_EN	<&gpio2 5 GPIO_ACTIVE_HIGH>
+			MX6QDL_PAD_NANDF_D5__GPIO2_IO05		(PAD_CTL_DSE_40ohm | PAD_CTL_SPEED_MED | PAD_CTL_PKE | PAD_CTL_PUE)
 		>;
 	};
 
@@ -510,7 +538,8 @@
 
 	fake_poweroff {
 		compatible = "fake-poweroff";
-		gpios = <&gpio2 3 GPIO_ACTIVE_LOW>;
+// gpio that will wake us up -- not sure if we have anything available... maybe proximity sensor?
+// 		gpios = <&gpio2 3 GPIO_ACTIVE_LOW>;
 		watchdog = <&wdog1>;
 	};
 
@@ -674,8 +703,7 @@
 			regulator-max-microvolt = <12000000>;
 			gpio = GP_REG_LVDS_LED_SUPPLY;
 			enable-active-high;
-			startup-delay-us = <2000000>;
-			vin-supply = <&reg_wlan_en>;
+			startup-delay-us = <1000000>;
 		};
 
 		reg_lvds_backlight_enable: regulator@6 {
@@ -700,7 +728,7 @@
 			enable-active-high;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_reg_sd3>;
-			gpios = GP_SD3_RESET;
+			gpio = GP_SD3_RESET;
 		};
 
 		reg_wlan_en: regulator@8 {
@@ -709,13 +737,11 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_reg_wlan_en>;
 			regulator-name = "wlan-en";
-			regulator-min-microvolt = <3300000>;
-			regulator-max-microvolt = <3300000>;
-			gpios = GP_REG_WLAN_EN;
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			gpio = GP_REG_WLAN_EN;
 			startup-delay-us = <70000>;
 			enable-active-high;
-			regulator-always-on;
-			vin-supply = <&reg_touch_en>;
 		};
 
 		reg_touch_en: regulator@9 {
@@ -724,12 +750,34 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_reg_touch_en>;
 			regulator-name = "touch-en";
-			regulator-min-microvolt = <3300000>;
-			regulator-max-microvolt = <3300000>;
-			gpios = GP_REG_TOUCH_EN;
-			startup-delay-us = <70000>;
+			regulator-min-microvolt = <5000000>;
+			regulator-max-microvolt = <5000000>;
+			gpio = GP_REG_TOUCH_EN;
 			regulator-always-on;
 		};
+
+		reg_bt_en: regulator@10 {
+			compatible = "regulator-fixed";
+			reg = <10>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&pinctrl_reg_bt_en>;
+			regulator-name = "bt-en";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			gpio = GP_REG_BT_EN;
+			enable-active-high;
+		};
+	};
+
+// dummy device for testing regulators
+	userspace-consumer {
+		compatible = "reg-userspace-consumer";
+		regulator-name = "nazgee-consumer";
+		regulator-supplies = "regbt";
+		regulator-boot-on;
+		status = "okay";
+
+		regbt-supply = <&reg_bt_en>;
 	};
 
 	sound {
