@@ -2629,10 +2629,15 @@ void mmc_rescan(struct work_struct *work)
 
 	mmc_claim_host(host);
 	for (i = 0; i < ARRAY_SIZE(freqs); i++) {
-		if (!mmc_rescan_try_freq(host, max(freqs[i], host->f_min)))
+		printk(KERN_NOTICE "%s(%s) will try %dHz\n", __func__, mmc_hostname(host), max(freqs[i], host->f_min));
+		if (!mmc_rescan_try_freq(host, max(freqs[i], host->f_min))) {
+			printk(KERN_NOTICE "%s(%s) completed OK\n", __func__, mmc_hostname(host));
 			break;
-		if (freqs[i] <= host->f_min)
+		}
+		if (freqs[i] <= host->f_min) {
+			printk(KERN_WARNING "%s(%s) freq too LOW\n", __func__, mmc_hostname(host));
 			break;
+		}
 	}
 	mmc_release_host(host);
 
