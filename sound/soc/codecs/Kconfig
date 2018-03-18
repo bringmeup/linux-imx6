@@ -457,7 +457,7 @@ config SND_SOC_MAX98088
        tristate
 
 config SND_SOC_MAX98090
-       tristate
+       tristate "Maxim Integrated MAX9890/MAX9891 CODEC"
 
 config SND_SOC_MAX98095
        tristate
