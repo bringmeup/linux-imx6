@@ -39,8 +39,6 @@
 #define PAD_MODE_USDHC4_50mhz  (PAD_CTL_SRE_SLOW | PAD_CTL_DSE_40ohm | PAD_CTL_SPEED_LOW | PAD_CTL_PKE | PAD_CTL_PUE | PAD_CTL_HYS | PAD_CTL_PUS_22K_UP)
 #define PAD_MODE_USDHC3_50mhz  (PAD_CTL_SRE_SLOW | PAD_CTL_DSE_80ohm | PAD_CTL_SPEED_LOW | PAD_CTL_PKE | PAD_CTL_PUE | PAD_CTL_HYS | PAD_CTL_PUS_47K_UP)
 
-
-
 &iomuxc {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog>;
@@ -117,90 +115,43 @@
 		>;
 	};
 
-	pinctrl_i2c1_1: i2c1_1grp {
+	pinctrl_i2c1_gpio: i2c1_1grp {
 		fsl,pins = <
-#define GP_I2C1_SCL	<&gpio5 27 GPIO_ACTIVE_HIGH>
 			MX6QDL_PAD_CSI0_DAT9__GPIO5_IO27		0x4001b8b1
-#define GP_I2C1_SDA	<&gpio5 26 GPIO_ACTIVE_HIGH>
 			MX6QDL_PAD_CSI0_DAT8__GPIO5_IO26		0x4001b8b1
 		>;
 	};
 
-// 	pinctrl_i2c1_sgtl5000: i2c1-sgtl5000grp {
-// 		fsl,pins = <
-// 			MX6QDL_PAD_GPIO_0__CCM_CLKO1		0x000b0		/* sys_mclk */
-// #define GP_SGTL5000_HP_MUTE	<&gpio1 29 GPIO_ACTIVE_LOW>
-// 			MX6QDL_PAD_ENET_TXD1__GPIO1_IO29	0x130b0		/* amplifier mute, weak pull-down */
-// #define GP_HEADPHONE_DET	<&gpio4 7 GPIO_ACTIVE_HIGH>
-// 			MX6QDL_PAD_KEY_ROW0__GPIO4_IO07		0x100b0
-// 		>;
-// 	};
+//	max98091_irq: max98091-irq {
+//		fsl,pins  = <
+//			MX6QDL_PAD_EIM_D16__I2C2_SDA		0x000b1 //0x1b0b0
+//		>;
+//	};
 
-// 	pinctrl_i2c2: i2c2grp {
-// 		fsl,pins = <
-// 			MX6QDL_PAD_KEY_COL3__I2C2_SCL		0x4001b8b1
-// 			MX6QDL_PAD_KEY_ROW3__I2C2_SDA		0x4001b8b1
-// 		>;
-// 	};
+// TODO: these params are invalid
+//	pinctrl_i2c1_ov5640: i2c1-ov5640grp {
+//		fsl,pins = <
+//			MX6QDL_PAD_EIM_A17__IPU2_CSI1_DATA12	0xb0b1
+//			MX6QDL_PAD_EIM_A18__IPU2_CSI1_DATA13	0xb0b1
+//			MX6QDL_PAD_EIM_A19__IPU2_CSI1_DATA14	0xb0b1
+//			MX6QDL_PAD_EIM_A20__IPU2_CSI1_DATA15	0xb0b1
+//			MX6QDL_PAD_EIM_A21__IPU2_CSI1_DATA16	0xb0b1
+//			MX6QDL_PAD_EIM_A22__IPU2_CSI1_DATA17	0xb0b1
+//			MX6QDL_PAD_EIM_A23__IPU2_CSI1_DATA18	0xb0b1
+//			MX6QDL_PAD_EIM_EB2__IPU2_CSI1_DATA19	0xb0b1
+//			MX6QDL_PAD_EIM_DA10__IPU2_CSI1_DATA_EN	0xb0b1
+//			MX6QDL_PAD_EIM_A16__IPU2_CSI1_PIXCLK	0xb0b1
+//			MX6QDL_PAD_EIM_DA11__IPU2_CSI1_HSYNC	0xb0b1
+//			MX6QDL_PAD_EIM_DA12__IPU2_CSI1_VSYNC	0xb0b1
+//		>;
+//	};
 
-// 	pinctrl_i2c2_1: i2c2_1grp {
-// 		fsl,pins = <
-// #define GP_I2C2_SCL	<&gpio4 12 GPIO_ACTIVE_HIGH>
-// 			MX6QDL_PAD_KEY_COL3__GPIO4_IO12		0x4001b8b1
-// #define GP_I2C2_SDA	<&gpio4 13 GPIO_ACTIVE_HIGH>
-// 			MX6QDL_PAD_KEY_ROW3__GPIO4_IO13		0x4001b8b1
-// 		>;
-// 	};
-
-// 	pinctrl_i2c2a_ov5642: i2c2a-ov5642grp { /* parallel camera */
-// 		fsl,pins = <
-// 			MX6QDL_PAD_CSI0_DAT12__IPU1_CSI0_DATA12		0x1b0b0
-// 			MX6QDL_PAD_CSI0_DAT13__IPU1_CSI0_DATA13		0x1b0b0
-// 			MX6QDL_PAD_CSI0_DAT14__IPU1_CSI0_DATA14		0x1b0b0
-// 			MX6QDL_PAD_CSI0_DAT15__IPU1_CSI0_DATA15		0x1b0b0
-// 			MX6QDL_PAD_CSI0_DAT16__IPU1_CSI0_DATA16		0x1b0b0
-// 			MX6QDL_PAD_CSI0_DAT17__IPU1_CSI0_DATA17		0x1b0b0
-// 			MX6QDL_PAD_CSI0_DAT18__IPU1_CSI0_DATA18		0x1b0b0
-// 			MX6QDL_PAD_CSI0_DAT19__IPU1_CSI0_DATA19		0x1b0b0
-// 			MX6QDL_PAD_CSI0_DATA_EN__IPU1_CSI0_DATA_EN	0x1b0b0
-// 			MX6QDL_PAD_CSI0_PIXCLK__IPU1_CSI0_PIXCLK	0x1b0b0
-// 			MX6QDL_PAD_CSI0_MCLK__IPU1_CSI0_HSYNC		0x1b0b0
-// 			MX6QDL_PAD_CSI0_VSYNC__IPU1_CSI0_VSYNC		0x1b0b0
-// 			MX6QDL_PAD_GPIO_3__CCM_CLKO2			0x000b0		/* mclk */
-// #define GP_OV5642_POWER_DOWN	<&gpio3 29 GPIO_ACTIVE_HIGH>
-// 			MX6QDL_PAD_EIM_D29__GPIO3_IO29			0x0b0b0
-// #define GP_OV5642_RESET		<&gpio1 4 GPIO_ACTIVE_LOW>
-// 			MX6QDL_PAD_GPIO_4__GPIO1_IO04			0x030b0
-// 		>;
-// 	};
-
-// 	pinctrl_i2c2b_ov5640_mipi: i2c2b-ov5640-mipigrp {
-// 		fsl,pins = <
-// #define GP_OV5640_MIPI_POWER_DOWN	<&gpio6 9 GPIO_ACTIVE_HIGH>
-// 			MX6QDL_PAD_NANDF_WP_B__GPIO6_IO09	0x0b0b0
-// #define GP_OV5640_MIPI_RESET		<&gpio2 5 GPIO_ACTIVE_LOW>
-// 			MX6QDL_PAD_NANDF_D5__GPIO2_IO05		0x030b0
-// 		>;
-// 	};
-
-// 	pinctrl_i2c2b_tc358743_mipi: i2c2b-tc358743_mipigrp {
-// 		fsl,pins = <
-// #define GP_TC3587_RESET	<&gpio6 9 GPIO_ACTIVE_LOW>
-// 			MX6QDL_PAD_NANDF_WP_B__GPIO6_IO09	0x030b0
-// #define GP_TC3587_IRQ	<&gpio2 5 GPIO_ACTIVE_HIGH>
-// #define GPIRQ_TC3587	<&gpio2 5 IRQ_TYPE_LEVEL_HIGH>
-// 			MX6QDL_PAD_NANDF_D5__GPIO2_IO05		0x130b0
-// 		>;
-// 	};
-
-// 	pinctrl_i2c2mux: i2c2muxgrp {
-// 		fsl,pins = <
-// #define GP_I2C2MUX_A		<&gpio3 20 GPIO_ACTIVE_HIGH>
-// 			MX6QDL_PAD_EIM_D20__GPIO3_IO20		0x030b0
-// #define GP_I2C2MUX_B		<&gpio4 15 GPIO_ACTIVE_HIGH>
-// 			MX6QDL_PAD_KEY_ROW4__GPIO4_IO15		0x030b0
-// 		>;
-// 	};
+	pinctrl_i2c1_ov5640_gpio: i2c1-ov5640-gpiosgrp {
+		fsl,pins = <
+			MX6QDL_PAD_EIM_DA10__GPIO3_IO10		0x0b0b0
+			MX6QDL_PAD_EIM_DA9__GPIO3_IO09		0x030b0
+		>;
+	};
 
 	pinctrl_i2c3: i2c3grp {
 		fsl,pins = <
@@ -209,54 +160,12 @@
 		>;
 	};
 
-	pinctrl_i2c3_1: i2c3_1grp {
+	pinctrl_i2c3_gpio: i2c3_1grp {
 		fsl,pins = <
-#define GP_I2C3_SCL	<&gpio3 17 GPIO_ACTIVE_HIGH>
 			MX6QDL_PAD_EIM_D17__GPIO3_IO17		0x4001b8b1
-#define GP_I2C3_SDA	<&gpio3 16 GPIO_ACTIVE_HIGH>
-			MX6QDL_PAD_EIM_D16__GPIO3_IO16		0x4001b8b1
+			MX6QDL_PAD_EIM_D18__GPIO3_IO18		0x4001b8b1
 		>;
 	};
-
-// I'm consider if this is mandatory and If mandatory is to have to IO controls "default"
-// and GPIO. Probably default one is enought, but let's keep it for a while.
-	pinctrl_i2c3mux: i2c3muxgrp {
-		fsl,pins = <
-#define GP_I2C3MUX_A	<&gpio2 25 GPIO_ACTIVE_HIGH>
-			MX6QDL_PAD_EIM_OE__GPIO2_IO25		0x030b0		/* pcie i2c enable */
-		>;
-	};
-
-// 	pinctrl_i2c3_gt911: i2c3_gt911grp {
-// 		fsl,pins = <
-// #define GPIRQ_GT911			<&gpio1 9 IRQ_TYPE_LEVEL_HIGH>
-// #define GP_GT911_IRQ			<&gpio1 9 GPIO_ACTIVE_HIGH>
-// /*			MX6QDL_PAD_GPIO_9__GPIO1_IO09		0x1b0b0		*/
-// #define GP_GT911_RESET		<&gpio2 7 GPIO_ACTIVE_HIGH>
-// 			MX6QDL_PAD_NANDF_D7__GPIO2_IO07		0x030b0
-// 		>;
-// 	};
-
-	pinctrl_i2c3_ov5640: i2c3-ov5640grp {
-		/* parallel camera on CSI1, pins differ for iMX6Q/iMX6DL */
-	};
-
-	pinctrl_i2c3_ov5640_gpios: i2c3-ov5640-gpiosgrp {
-		fsl,pins = <
-#define GP_OV5640_POWER_DOWN	<&gpio3 13 GPIO_ACTIVE_HIGH>
-			MX6QDL_PAD_EIM_DA13__GPIO3_IO13		0x0b0b0
-#define GP_OV5640_RESET		<&gpio3 14 GPIO_ACTIVE_LOW>
-			MX6QDL_PAD_EIM_DA14__GPIO3_IO14		0x030b0
-		>;
-	};
-
-//	pinctrl_i2c3_tsc2004: i2c3-tsc2004grp {
-//		fsl,pins = <
-//#define GPIRQ_TSC2004		<&gpio4 20 IRQ_TYPE_EDGE_FALLING>
-//#define GP_TSC2004		<&gpio4 20 GPIO_ACTIVE_LOW>
-//			MX6QDL_PAD_DI0_PIN4__GPIO4_IO20		0x1b0b0		/* tsc2004 interrupt */
-//		>;
-//	};
 
 	pinctrl_pwm1: pwm1grp {
 		fsl,pins = <
@@ -476,7 +385,6 @@
 	};
 };
 
-
 / {
 	aliases {
 		backlight_lvds = &backlight_lvds;
@@ -581,46 +489,6 @@
 // 			gpio-key,wakeup;
 // 		};
 // 	};
-
-// 	i2cmux@2 {
-// 		compatible = "i2c-mux-gpio";
-// 		pinctrl-names = "default";
-// 		pinctrl-0 = <&pinctrl_i2c2mux>;
-// 		#address-cells = <1>;
-// 		#size-cells = <0>;
-// 		mux-gpios = GP_I2C2MUX_A, GP_I2C2MUX_B;
-// 		i2c-parent = <&i2c2>;
-// 		idle-state = <0>;
-// 
-// 		i2c2a: i2c2@1 {
-// 			reg = <1>;
-// 			#address-cells = <1>;
-// 			#size-cells = <0>;
-// 		};
-// 
-// 		i2c2b: i2c2@2 {
-// 			reg = <2>;
-// 			#address-cells = <1>;
-// 			#size-cells = <0>;
-// 		};
-// 	};
-
-	i2cmux@3 {
-		compatible = "i2c-mux-gpio";
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_i2c3mux>;
-		#address-cells = <1>;
-		#size-cells = <0>;
-		mux-gpios = GP_I2C3MUX_A;
-		i2c-parent = <&i2c3>;
-		idle-state = <0>;
-
-		i2c3a: i2c3@1 {
-			reg = <1>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-		};
-	};
 
 	memory {
 		reg = <0x10000000 0xeffffc00>;
@@ -879,156 +747,45 @@
 };
 
 &i2c1 {
-	clock-frequency = <100000>;
 	pinctrl-names = "default", "gpio";
 	pinctrl-0 = <&pinctrl_i2c1>;
-	pinctrl-1 = <&pinctrl_i2c1_1>;
-	scl-gpios = GP_I2C1_SCL;
-	sda-gpios = GP_I2C1_SDA;
+	pinctrl-1 = <&pinctrl_i2c1_gpio>;
+	scl-gpios = <&gpio5 27 GPIO_ACTIVE_HIGH>;
+	sda-gpios = <&gpio5 26 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 
-// 	sgtl5000: sgtl5000@0a {
-// 		compatible = "fsl,sgtl5000";
-// 		pinctrl-names = "default";
-// 		pinctrl-0 = <&pinctrl_i2c1_sgtl5000>;
-// 		reg = <0x0a>;
-// 		clocks = <&clks IMX6QDL_CLK_CKO>;
-// 		VDDA-supply = <&reg_2p5v>;
-// 		VDDIO-supply = <&reg_3p3v>;
-// 	};
+	ov5640: ov5640@3c {
+		compatible = "ovti,ov5640";
+		reg = <0x3c>;
+//		pinctrl-names = "default";
+//		pinctrl-0 = <&pinctrl_i2c1_ov5640 &pinctrl_i2c1_ov5640_gpio>;
+//		clocks = <&clk24m 0>;
+//		clock-names = "csi_mclk";
+//		DOVDD-supply = <&reg_1p8v>;
+//		AVDD-supply = <&reg_2p5v>;
+//		DVDD-supply = <&reg_1p8v>;
+//		pwn-gpios = <&gpio3 10 GPIO_ACTIVE_LOW>;
+//		rst-gpios = <&gpio3 9 GPIO_ACTIVE_LOW>;
+//		csi_id = <1>;
+//		mclk = <24000000>;
+//		mclk_source = <0>;
+	};
 };
 
-// &i2c2 {
-// 	clock-frequency = <100000>;
-// 	pinctrl-names = "default", "gpio";
-// 	pinctrl-0 = <&pinctrl_i2c2>;
-// 	pinctrl-1 = <&pinctrl_i2c2_1>;
-// 	scl-gpios = GP_I2C2_SCL;
-// 	sda-gpios = GP_I2C2_SDA;
-// 	status = "okay";
-//
-// 	hdmi: edid@50 {
-// 		compatible = "fsl,imx6-hdmi-i2c";
-// 		reg = <0x50>;
-// 	};
-// };
-
-// &i2c2a {
-// 	ft5x06_ts@38 {
-// 		compatible = "ft5x06-ts";
-// 		reg = <0x38>;
-// 		interrupts-extended = GPIRQ_I2C3_J7;
-// 		wakeup-gpios = GP_I2C3_J7;
-// 	};
-
-// 	ov5642: ov5642@3c {
-// 		compatible = "ovti,ov5642";
-// 		reg = <0x3c>;
-// 		pinctrl-names = "default";
-// 		pinctrl-0 = <&pinctrl_i2c2a_ov5642>;
-// 		clocks = <&clks IMX6QDL_CLK_CKO2>;
-// 		clock-names = "csi_mclk";
-// 		DOVDD-supply = <&reg_1p8v>;
-// 		AVDD-supply = <&reg_2p5v>;
-// 		DVDD-supply = <&reg_1p8v>;
-// 		pwn-gpios = GP_OV5642_POWER_DOWN;
-// 		rst-gpios = GP_OV5642_RESET;
-// 		ipu_id = <0>;
-// 		csi_id = <0>;
-// 		mclk = <24000000>;
-// 		mclk_source = <0>;
-// 	};
-// };
-
-// &i2c2b {
-// 	ov5640_mipi: ov5640_mipi@3c {
-// 		compatible = "ovti,ov5640_mipi";
-// 		reg = <0x3c>;
-// 		pinctrl-names = "default";
-// 		pinctrl-0 = <&pinctrl_i2c2b_ov5640_mipi>;
-// 		clocks = <&mipi_mclk>;
-// 		clock-names = "csi_mclk";
-// 		DOVDD-supply = <&reg_1p8v>;
-// 		AVDD-supply = <&reg_2p5v>;
-// 		DVDD-supply = <&reg_1p8v>;
-// 		pwn-gpios = GP_OV5640_MIPI_POWER_DOWN;
-// 		rst-gpios = GP_OV5640_MIPI_RESET;
-// 		ipu_id = <0>;
-// 		csi_id = <1>;
-// 		mclk = <22000000>;
-// 		mclk_source = <0>;
-// 	};
-// 
-// 	tc358743_mipi: tc358743_mipi@0f {
-// 		compatible = "tc358743_mipi";
-// 		reg = <0x0f>;
-// 		pinctrl-names = "default";
-// 		pinctrl-0 = <&pinctrl_i2c2b_tc358743_mipi>;
-// 		DOVDD-supply = <&reg_1p8v>;
-// 		AVDD-supply = <&reg_2p5v>;
-// 		DVDD-supply = <&reg_1p8v>;
-// 		rst-gpios = GP_TC3587_RESET;
-// 		irq-gpios = GP_TC3587_IRQ;
-// 		interrupts-extended = GPIRQ_TC3587;
-// 		ipu_id = <0>;
-// 		csi_id = <0>;
-// 		mclk = <27000000>;
-// 		mclk_source = <0>;
-// 	};
-// };
-
 &i2c3 {
-	clock-frequency = <100000>;
-	pinctrl-names = "default", "gpio";
+	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_i2c3>;
-	pinctrl-1 = <&pinctrl_i2c3_1>;
-	scl-gpios = GP_I2C3_SCL;
-	sda-gpios = GP_I2C3_SDA;
+	pinctrl-1 = <&pinctrl_i2c3_gpio>;
+	scl-gpios = <&gpio3 17 GPIO_ACTIVE_HIGH>;
+	sda-gpios = <&gpio3 18 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 
-	max98091: codec@10 {
+	max98091: audio-codec@10 {
 		compatible = "maxim,max98091";
-//		reg = <0x10>;
-//		interrupts = <2 0>;
-//		interrupt-parent = <&gpx0>;
-//		pinctrl-names = "default";
-//		pinctrl-0 = <&max98090_irq>;
-//		clocks = <&pmu_system_controller 0>;
-//		clock-names = "mclk";
+		reg = <0x10>;
+        interrupt-parent = <&gpio3>;
+        interrupts = <16 GPIO_ACTIVE_LOW>;
 	};
-
-// 	ili210x@41 {
-// 		compatible = "ili210x";
-// 		reg = <0x41>;
-// 		interrupts-extended = GPIRQ_I2C3_J7;
-// 		wakeup-gpios = GP_I2C3_J7;
-// 	};
-
-// 	ov5640: ov5640@3c {
-// 		compatible = "ovti,ov5640";
-// 		reg = <0x3c>;
-// 		pinctrl-names = "default";
-// 		pinctrl-0 = <&pinctrl_i2c3_ov5640 &pinctrl_i2c3_ov5640_gpios>;
-// 		clocks = <&clk24m 0>;
-// 		clock-names = "csi_mclk";
-// 		DOVDD-supply = <&reg_1p8v>;
-// 		AVDD-supply = <&reg_2p5v>;
-// 		DVDD-supply = <&reg_1p8v>;
-// 		pwn-gpios = GP_OV5640_POWER_DOWN;
-// 		rst-gpios = GP_OV5640_RESET;
-// 		csi_id = <1>;
-// 		mclk = <24000000>;
-// 		mclk_source = <0>;
-// 	};
-// 
-// 	tsc2004: tsc2004@48 {
-// 		compatible = "tsc2004,tsc2004";
-// 		reg = <0x48>;
-// 		pinctrl-names = "default";
-// 		pinctrl-0 = <&pinctrl_i2c3_tsc2004>;
-// 		interrupts-extended = GPIRQ_TSC2004;
-// 		wakeup-gpios = GP_TSC2004;
-// 	};
 };
 
 &ldb {
