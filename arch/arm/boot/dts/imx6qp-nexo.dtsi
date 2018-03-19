@@ -932,7 +932,8 @@
 	#address-cells = <1>;
 	#size-cells = <0>;
 	wlcore: wlcore@2 {
-		compatible = "ti,wl1283";
+// few of our boards have different modules - wl1831, wl1835 and wl1837
+		compatible = "ti,wl1835";
 		interrupts-extended = GPIRQ_CBM283;
 		reg = <2>;
 		ref-clock-frequency = <38400000>;
