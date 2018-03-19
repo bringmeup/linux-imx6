@@ -58,12 +58,12 @@
 // 		>;
 // 	};
 
-// 	pinctrl_bt_rfkill: bt-rfkillgrp {
-// 		fsl,pins = <
-// #define GP_BT_RFKILL_RESET	<&gpio6 16 GPIO_ACTIVE_LOW>
-// 			MX6QDL_PAD_NANDF_CS3__GPIO6_IO16	0x030b0
-// 		>;
-// 	};
+	pinctrl_bt_rfkill: bt-rfkillgrp {
+		fsl,pins = <
+#define GP_BT_RFKILL_RESET	<&gpio2 4 GPIO_ACTIVE_LOW>
+			MX6QDL_PAD_NANDF_D4__GPIO2_IO04		(PAD_CTL_DSE_40ohm | PAD_CTL_SPEED_MED | PAD_CTL_PKE | PAD_CTL_PUE)
+		>;
+	};
 
 // 	pinctrl_ecspi1: ecspi1grp {
 // 		fsl,pins = <
@@ -388,8 +388,8 @@
 / {
 	aliases {
 		backlight_lvds = &backlight_lvds;
-// 		bt_rfkill = &bt_rfkill;
-// 		bt_kim = &bt_kim;
+		bt_rfkill = &bt_rfkill;
+		bt_kim = &bt_kim;
 		fb_lvds = &fb_lvds;
 		fb_lvds2 = &fb_lvds2;
 		ldb = &ldb;
@@ -413,30 +413,30 @@
 	};
 
 
-// 	btwilink {
-// 		compatible = "btwilink";
-// 	};
-// 
-// 	bt_kim: bt_kim {
-// 		compatible = "kim";
-// 		pinctrl-names = "default";
-// 		pinctrl-0 = <&pinctrl_bt_rfkill>;
-// 		nshutdown_gpio = GP_BT_RFKILL_RESET;
-// 		dev_name = "/dev/ttymxc2";
-// 		flow_cntrl = <1>;
-// 		baud_rate = <3000000>;
-// 		status = "okay";
-// 	};
-// 
-// 	bt_rfkill: bt_rfkill {
-// 		compatible = "net,rfkill-gpio";
-// 		pinctrl-names = "default";
-// 		pinctrl-0 = <&pinctrl_bt_rfkill>;
-// 		name = "bt_rfkill";
-// 		type = <2>;	/* bluetooth */
-// 		reset-gpios = GP_BT_RFKILL_RESET;
-// 		status = "disabled";
-// 	};
+	btwilink {
+		compatible = "btwilink";
+	};
+
+	bt_kim: bt_kim {
+		compatible = "kim";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_bt_rfkill>;
+		nshutdown_gpio = GP_BT_RFKILL_RESET;
+		dev_name = "/dev/ttymxc1";
+		flow_cntrl = <1>;
+		baud_rate = <3000000>;
+		status = "okay";
+	};
+
+	bt_rfkill: bt_rfkill {
+		compatible = "net,rfkill-gpio";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_bt_rfkill>;
+		name = "bt_rfkill";
+		type = <2>;	/* bluetooth */
+		reset-gpios = GP_BT_RFKILL_RESET;
+		status = "disabled";
+	};
 
 	caam_keyblob {
 		compatible = "fsl,sec-v4.0-keyblob";
@@ -636,22 +636,12 @@
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_reg_bt_en>;
 			regulator-name = "bt-en";
-			regulator-min-microvolt = <1800000>;
-			regulator-max-microvolt = <1800000>;
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
 			gpio = GP_REG_BT_EN;
 			enable-active-high;
+			regulator-always-on;
 		};
-	};
-
-// dummy device for testing regulators
-	userspace-consumer {
-		compatible = "reg-userspace-consumer";
-		regulator-name = "nazgee-consumer";
-		regulator-supplies = "regbt";
-		regulator-boot-on;
-		status = "okay";
-
-		regbt-supply = <&reg_bt_en>;
 	};
 
 	sound {
