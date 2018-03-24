@@ -54,14 +54,20 @@
 };
 
 &iomuxc_imx6q_nitrogen6_max {
-// 	pinctrl_audmux: audmuxgrp {
-// 		fsl,pins = <
-// 			MX6QDL_PAD_CSI0_DAT7__AUD3_RXD		0x130b0
-// 			MX6QDL_PAD_CSI0_DAT4__AUD3_TXC		0x130b0
-// 			MX6QDL_PAD_CSI0_DAT5__AUD3_TXD		0x110b0
-// 			MX6QDL_PAD_CSI0_DAT6__AUD3_TXFS		0x130b0
-// 		>;
-// 	};
+	pinctrl_audmux_i2s4: i2s4grp {
+		fsl,pins = <
+			MX6QDL_PAD_SD2_DAT3__AUD4_TXC		0x130b0
+			MX6QDL_PAD_SD2_DAT2__AUD4_TXD		0x110b0
+			MX6QDL_PAD_SD2_DAT1__AUD4_TXFS		0x130b0
+			MX6QDL_PAD_SD2_DAT0__AUD4_RXD		0x130b0
+		>;
+	};
+
+	pinctrl_i2c3_max98091: i2c3grp {
+		fsl,pins = <
+			MX6QDL_PAD_GPIO_0__CCM_CLKO1		0x000b0		/* sys_mclk */
+	>;
+};
 
 	pinctrl_bt_rfkill: bt-rfkillgrp {
 		fsl,pins = <
@@ -649,25 +655,29 @@
 		};
 	};
 
-	sound {
-		compatible = "fsl,imx6q-nexo-max98091";
+// dummy device for testing regulators
+	userspace-consumer {
+		compatible = "reg-userspace-consumer";
+		regulator-name = "nazgee-consumer";
+		regulator-supplies = "regbt";
+		regulator-boot-on;
+		status = "okay";
+
+		regbt-supply = <&reg_bt_en>;
+	};
+
+	sound-asoc {
+		compatible = "fsl,imx-audio-max98091";
 		model = "max98091-audio";
-// 		ssi-controller = <&ssi1>;
+		ssi-controller = <&ssi1>;
 		audio-codec = <&max98091>;
-// 		audio-routing =
-// 			"MIC_IN", "Mic Jack",
-// 			"Mic Jack", "Mic Bias",
-// 			"Headphone Jack", "HP_OUT",
-// 			"Ext Spk", "HP_OUT";
-// 		mux-int-port = <1>;
-// 		mux-ext-port = <3>;
-// 		mute-gpios = GP_SGTL5000_HP_MUTE;
-// 		hp-detect-gpios = GP_HEADPHONE_DET;
-// 		/*
-// 		 * mute the amplifier on the hp outputs
-// 		 * when hp jack detected
-// 		 */
-// 		spk-mute-on-hp-detect;
+		audio-routing =
+			"MIC_IN", "Mic Jack",
+			"Mic Jack", "Mic Bias",
+			"Headphone Jack", "HP_OUT",
+			"Ext Spk", "HP_OUT";
+		mux-int-port = <1>;
+		mux-ext-port = <4>;
 	};
 
 	v4l2_cap_0 {
@@ -710,11 +720,11 @@
 	};
 };
 
-// &audmux {
-// 	pinctrl-names = "default";
-// 	pinctrl-0 = <&pinctrl_audmux>;
-// 	status = "okay";
-// };
+&audmux {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_audmux_i2s4>;
+	status = "okay";
+};
 
 &fec {
 	status = "okay";
@@ -777,9 +787,13 @@
 
 	max98091: audio-codec@10 {
 		compatible = "maxim,max98091";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_i2c3_max98091>;
 		reg = <0x10>;
-        interrupt-parent = <&gpio3>;
-        interrupts = <16 GPIO_ACTIVE_LOW>;
+		interrupt-parent = <&gpio3>;
+		interrupts = <16 GPIO_ACTIVE_LOW>;
+		clocks = <&clks IMX6QDL_CLK_CKO>;
+		clock-names = "mclk";
 	};
 };
 
@@ -844,6 +858,11 @@
 };
 
 &ssi1 {
+	fsl,mode = "i2s-master";
+	status = "okay";
+};
+
+&ssi2 {
 	fsl,mode = "i2s-slave";
 	status = "okay";
 };

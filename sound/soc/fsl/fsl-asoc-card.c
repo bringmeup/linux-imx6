@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Freescale Generic ASoC Sound Card driver with ASRC
  *
  * Copyright (C) 2014 Freescale Semiconductor, Inc.
@@ -113,6 +113,8 @@ static const struct snd_soc_dapm_widget fsl_asoc_card_dapm_widgets[] = {
 	SND_SOC_DAPM_MIC("AMIC", NULL),
 	SND_SOC_DAPM_MIC("DMIC", NULL),
 };
+
+static const char* max9809x_codec_dai_name = "HiFi";
 
 static int fsl_asoc_card_hw_params(struct snd_pcm_substream *substream,
 				   struct snd_pcm_hw_params *params)
@@ -398,6 +400,11 @@ static int fsl_asoc_card_late_probe(struct snd_soc_card *card)
 	return 0;
 }
 
+static int fsl_asoc_card_is_max9809x(struct device_node* np) {
+	return (of_device_is_compatible(np, "fsl,imx-audio-max98090")
+		|| of_device_is_compatible(np, "fsl,imx-audio-max98091"));
+}
+
 static int fsl_asoc_card_probe(struct platform_device *pdev)
 {
 	struct device_node *cpu_np, *codec_np, *asrc_np;
@@ -475,6 +482,10 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
 		priv->codec_priv.fll_id = WM8962_SYSCLK_FLL;
 		priv->codec_priv.pll_id = WM8962_FLL;
 		priv->dai_fmt |= SND_SOC_DAIFMT_CBM_CFM;
+	} else if (fsl_asoc_card_is_max9809x(np)) {
+		priv->codec_priv.mclk_id = 0x00;
+		priv->codec_priv.mclk_freq = 12000000;
+		priv->dai_fmt |= SND_SOC_DAIFMT_CBS_CFS;
 	} else {
 		dev_err(&pdev->dev, "unknown Device Tree compatible\n");
 		return -EINVAL;
@@ -521,7 +532,8 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
 	/* Normal DAI Link */
 	priv->dai_link[0].cpu_of_node = cpu_np;
 	priv->dai_link[0].codec_of_node = codec_np;
-	priv->dai_link[0].codec_dai_name = codec_dev->name;
+	priv->dai_link[0].codec_dai_name = fsl_asoc_card_is_max9809x(np)
+			? max9809x_codec_dai_name : codec_dev->name;
 	priv->dai_link[0].platform_of_node = cpu_np;
 	priv->dai_link[0].dai_fmt = priv->dai_fmt;
 	priv->card.num_links = 1;
@@ -578,6 +590,8 @@ static const struct of_device_id fsl_asoc_card_dt_ids[] = {
 	{ .compatible = "fsl,imx-audio-cs42888", },
 	{ .compatible = "fsl,imx-audio-sgtl5000", },
 	{ .compatible = "fsl,imx-audio-wm8962", },
+	{ .compatible = "fsl,imx-audio-max98090", },
+	{ .compatible = "fsl,imx-audio-max98091", },
 	{}
 };
 
