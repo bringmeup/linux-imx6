@@ -671,7 +671,7 @@
 		ipu_id = <0>;
 		csi_id = <0>;
 		mclk_source = <0>;
-		status = "okay";
+		status = "disabled";
 	};
 
 	v4l2_cap_1: v4l2_cap_1 {
@@ -688,7 +688,7 @@
 		ipu_id = <0>;
 		csi_id = <1>;
 		mclk_source = <0>;
-		status = "okay";
+		status = "disabled";
 	};
 
 	v4l2_cap_3: v4l2_cap_3 {
@@ -697,7 +697,7 @@
 		csi_id = <0>;
 		mipi_camera = <1>;
 		mclk_source = <0>;
-		status = "okay";
+		status = "disabled";
 	};
 
 	v4l2_out {
