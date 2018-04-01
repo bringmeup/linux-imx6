@@ -484,7 +484,6 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
 		priv->dai_fmt |= SND_SOC_DAIFMT_CBM_CFM;
 	} else if (fsl_asoc_card_is_max9809x(np)) {
 		priv->codec_priv.mclk_id = 0x00;
-		priv->codec_priv.mclk_freq = 12000000;
 		priv->dai_fmt |= SND_SOC_DAIFMT_CBS_CFS;
 	} else {
 		dev_err(&pdev->dev, "unknown Device Tree compatible\n");
