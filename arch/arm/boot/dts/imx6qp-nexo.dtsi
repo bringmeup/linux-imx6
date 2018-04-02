@@ -41,7 +41,6 @@
 #define PAD_CTL_SRE_SLOW                (0x00000)
 
 
-
 // 0x17059
 #define PAD_MODE_LOWSPEED_47k \
 (PAD_CTL_SRE_FAST | PAD_CTL_DSE_80ohm | PAD_CTL_SPEED_LOW | PAD_CTL_PKE | PAD_CTL_PUE | PAD_CTL_PUS_47K_UP | PAD_CTL_HYS)
@@ -112,7 +111,7 @@
 
 	pinctrl_i2c3_max98091: i2c3grp {
 		fsl,pins = <
-			MX6QDL_PAD_GPIO_0__CCM_CLKO1		0x000b0		/* sys_mclk */
+			MX6QDL_PAD_GPIO_0__CCM_CLKO1		(PAD_CTL_SRE_FAST | PAD_CTL_DSE_34ohm | PAD_CTL_SPEED_LOW)
 		>;
 	};
 
@@ -687,10 +686,7 @@
 		ssi-controller = <&ssi1>;
 		audio-codec = <&max98091>;
 		audio-routing =
-			"MIC_IN", "Mic Jack",
-			"Mic Jack", "Mic Bias",
-			"Headphone Jack", "HP_OUT",
-			"Ext Spk", "HP_OUT";
+			"Headphone Jack", "HP_OUT";
 		mux-int-port = <1>;
 		mux-ext-port = <4>;
 	};
