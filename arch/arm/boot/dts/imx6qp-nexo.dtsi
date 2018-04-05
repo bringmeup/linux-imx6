@@ -115,6 +115,12 @@
 		>;
 	};
 
+	pinctrl_i2c3_vcnl4200: i2c3grp {
+		fsl,pins = <
+			MX6QDL_PAD_CSI0_DAT7__GPIO5_IO25		PAD_MODE_LOWSPEED
+		>;
+	};
+
 	pinctrl_bt_rfkill: bt-rfkillgrp {
 		fsl,pins = <
 #define GP_BT_RFKILL_RESET	<&gpio2 4 GPIO_ACTIVE_LOW>
@@ -806,6 +812,13 @@
 		interrupts = <16 GPIO_ACTIVE_LOW>;
 		clocks = <&clks IMX6QDL_CLK_CKO>;
 		clock-names = "mclk";
+	};
+
+	vcnl4200: vcnl4200@51 {
+		compatible = "vcnl4200";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_i2c3_vcnl4200>;
+		reg = <0x51>;
 	};
 };
 
