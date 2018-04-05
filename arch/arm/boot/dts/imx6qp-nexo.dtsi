@@ -116,9 +116,9 @@
 	};
 
 	pinctrl_i2c3_vcnl4200: i2c3grp {
-		fsl,pins = <
-			MX6QDL_PAD_CSI0_DAT7__GPIO5_IO25		PAD_MODE_LOWSPEED
-		>;
+// 		fsl,pins = <
+// 			MX6QDL_PAD_CSI0_DAT7__GPIO5_IO25		PAD_MODE_LOWSPEED
+// 		>;
 	};
 
 	pinctrl_bt_rfkill: bt-rfkillgrp {
