@@ -1,4 +1,4 @@
-/*
+﻿/*
  * max98090.c -- MAX98090 ALSA SoC Audio driver
  *
  * Copyright 2011-2012 Maxim Integrated Products
@@ -1527,30 +1527,35 @@ static int max98090_add_widgets(struct snd_soc_codec *codec)
 	return 0;
 }
 
+struct bclk_table {
+    unsigned int pclk;
+    unsigned int lrclk;
+    unsigned long long ni;
+    unsigned long long mi;
+};
+
 static const int pclk_rates[] = {
-	12000000, 12000000, 13000000, 13000000,
-	16000000, 16000000, 19200000, 19200000
+	12000000, 12000000, 13000000, 13000000, 16000000, 16000000, 19200000, 19200000
 };
 
 static const int lrclk_rates[] = {
-	8000, 16000, 8000, 16000,
-	8000, 16000, 8000, 16000
+	8000, 16000, 8000, 16000, 8000, 16000, 8000, 16000
 };
 
 static const int user_pclk_rates[] = {
-	13000000, 13000000, 19200000, 19200000,
+	12000000, 13000000, 13000000, 19200000, 19200000,
 };
 
 static const int user_lrclk_rates[] = {
-	44100, 48000, 44100, 48000,
+	44100, 44100, 48000, 44100, 48000,
 };
 
 static const unsigned long long ni_value[] = {
-	3528, 768, 441, 8
+	294, 3528, 768, 441, 8
 };
 
 static const unsigned long long mi_value[] = {
-	8125, 1625, 1500, 25
+	625, 8125, 1625, 1500, 25
 };
 
 static void max98090_configure_bclk(struct snd_soc_codec *codec)
@@ -1569,6 +1574,9 @@ static void max98090_configure_bclk(struct snd_soc_codec *codec)
 		return;
 	}
 
+    dev_err(codec->dev, "MAX98090 clocks are: sysclk=%u pclk=%u bclk=%u lrclk=%u\n",
+            max98090->sysclk, max98090->pclk, max98090->bclk, max98090->lrclk);
+
 	/* Skip configuration when operating as slave */
 	if (!(snd_soc_read(codec, M98090_REG_MASTER_MODE) &
 		M98090_MAS_MASK)) {
@@ -1577,7 +1585,7 @@ static void max98090_configure_bclk(struct snd_soc_codec *codec)
 
 	/* Check for supported PCLK to LRCLK ratios */
 	for (i = 0; i < ARRAY_SIZE(pclk_rates); i++) {
-		if ((pclk_rates[i] == max98090->sysclk) &&
+		if ((pclk_rates[i] == max98090->pclk) &&
 			(lrclk_rates[i] == max98090->lrclk)) {
 			dev_dbg(codec->dev,
 				"Found supported PCLK to LRCLK rates 0x%x\n",
@@ -1592,9 +1600,11 @@ static void max98090_configure_bclk(struct snd_soc_codec *codec)
 		}
 	}
 
+    //max98090 2-0010: MAX98090 clocks are: sysclk=24000000 pclk=12000000 bclk=1411200 lrclk=44100
+
 	/* Check for user calculated MI and NI ratios */
 	for (i = 0; i < ARRAY_SIZE(user_pclk_rates); i++) {
-		if ((user_pclk_rates[i] == max98090->sysclk) &&
+		if ((user_pclk_rates[i] == max98090->pclk) &&
 			(user_lrclk_rates[i] == max98090->lrclk)) {
 			dev_dbg(codec->dev,
 				"Found user supported PCLK to LRCLK rates\n");
