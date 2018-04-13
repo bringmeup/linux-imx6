@@ -45,6 +45,7 @@
 
 #define VCNL4200_AL_CONF	0x00 /* Ambient light configuration */
 #define VCNL4200_PS_CONF1	0x03 /* Proximity configuration */
+#define VCNL4200_PS_CONF2	0x04 /* Proximity configuration */
 #define VCNL4200_PS_DATA	0x08 /* Proximity data */
 #define VCNL4200_AL_DATA	0x09 /* Ambient light data */
 #define VCNL4200_DEV_ID		0x0e /* Device ID, slave address and version */
@@ -121,9 +122,14 @@ static int vcnl4200_init(struct vcnl4000_data *data)
 	ret = i2c_smbus_write_byte_data(data->client, VCNL4200_AL_CONF, 0x00);
 	if (ret < 0)
 		return -EIO;
-	ret = i2c_smbus_write_byte_data(data->client, VCNL4200_PS_CONF1, 0x00);
+	/* PS_ IT=9T */
+	ret = i2c_smbus_write_word_data(data->client, VCNL4200_PS_CONF1, 0x000a);
 	if (ret < 0)
 		return -EIO;
+	/* PS_MPS=4 multi-pulses, I_LED=100mA */
+	ret = i2c_smbus_write_word_data(data->client, VCNL4200_PS_CONF2, 0x0260);
+		if (ret < 0)
+			return -EIO;
 
 	data->al_scale = 24000;
 
