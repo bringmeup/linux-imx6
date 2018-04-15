@@ -122,14 +122,14 @@ static int vcnl4200_init(struct vcnl4000_data *data)
 	ret = i2c_smbus_write_byte_data(data->client, VCNL4200_AL_CONF, 0x00);
 	if (ret < 0)
 		return -EIO;
-	/* PS_ IT=9T */
-	ret = i2c_smbus_write_word_data(data->client, VCNL4200_PS_CONF1, 0x000a);
+	/* PS_ IT=9T, PS_Duty=1/640 */
+	ret = i2c_smbus_write_word_data(data->client, VCNL4200_PS_CONF1, 0x008a);
 	if (ret < 0)
 		return -EIO;
-	/* PS_MPS=4 multi-pulses, I_LED=100mA */
-	ret = i2c_smbus_write_word_data(data->client, VCNL4200_PS_CONF2, 0x0260);
-		if (ret < 0)
-			return -EIO;
+	/* PS_MPS=8 multi-pulses, I_LED=50mA */
+	ret = i2c_smbus_write_word_data(data->client, VCNL4200_PS_CONF2, 0x0060);
+	if (ret < 0)
+		return -EIO;
 
 	data->al_scale = 24000;
 
