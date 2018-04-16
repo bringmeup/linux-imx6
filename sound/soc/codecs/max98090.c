@@ -1471,30 +1471,36 @@ static int max98090_add_widgets(struct snd_soc_codec *codec)
 	return 0;
 }
 
-static const int pclk_rates[] = {
-	12000000, 12000000, 13000000, 13000000,
-	16000000, 16000000, 19200000, 19200000
+struct bclk_config_table {
+	unsigned int pclk;
+	unsigned int lrclk;
+	unsigned long long mi;
+	unsigned long long ni;
 };
 
-static const int lrclk_rates[] = {
-	8000, 16000, 8000, 16000,
-	8000, 16000, 8000, 16000
+#define BCLK_CONFIG(w,x,y,z) \
+	{ .pclk = (w), .lrclk = (x), .mi = (y), .ni = (z) }
+
+// Used for Exact Integer Mode
+static const struct bclk_config_table exact_bclk_table[] = {
+	BCLK_CONFIG(12000000, 8000,  0, 0),
+	BCLK_CONFIG(12000000, 16000, 0, 0),
+	BCLK_CONFIG(13000000, 8000,  0, 0),
+	BCLK_CONFIG(13000000, 16000, 0, 0),
+	BCLK_CONFIG(16000000, 8000,  0, 0),
+	BCLK_CONFIG(16000000, 16000, 0, 0),
+	BCLK_CONFIG(19200000, 8000,  0, 0),
+	BCLK_CONFIG(19200000, 16000, 0, 0)
 };
 
-static const int user_pclk_rates[] = {
-	12000000, 13000000, 13000000, 19200000, 19200000,
-};
-
-static const int user_lrclk_rates[] = {
-	44100, 44100, 48000, 44100, 48000,
-};
-
-static const unsigned long long ni_value[] = {
-	294, 3528, 768, 441, 8
-};
-
-static const unsigned long long mi_value[] = {
-	625, 8125, 1625, 1500, 25
+// Used for Manual Ratio Mode
+static const struct bclk_config_table user_bclk_table[] = {
+	BCLK_CONFIG(12000000, 44100, 625, 294),
+	BCLK_CONFIG(12000000, 48000, 0, 0), // TBD
+	BCLK_CONFIG(13000000, 44100, 8125, 3528),
+	BCLK_CONFIG(13000000, 48000, 1625, 768),
+	BCLK_CONFIG(19200000, 44100, 1500, 441),
+	BCLK_CONFIG(19200000, 48000, 25, 8)
 };
 
 static void max98090_configure_bclk(struct snd_soc_codec *codec)
@@ -1520,9 +1526,9 @@ static void max98090_configure_bclk(struct snd_soc_codec *codec)
 	}
 
 	/* Check for supported PCLK to LRCLK ratios */
-	for (i = 0; i < ARRAY_SIZE(pclk_rates); i++) {
-		if ((pclk_rates[i] == max98090->pclk) &&
-			(lrclk_rates[i] == max98090->lrclk)) {
+	for (i = 0; i < ARRAY_SIZE(exact_bclk_table); i++) {
+		if ((exact_bclk_table[i].pclk == max98090->pclk) &&
+			(exact_bclk_table[i].lrclk == max98090->lrclk)) {
 			dev_dbg(codec->dev,
 				"Found supported PCLK to LRCLK rates 0x%x\n",
 				i + 0x8);
@@ -1537,13 +1543,13 @@ static void max98090_configure_bclk(struct snd_soc_codec *codec)
 	}
 
 	/* Check for user calculated MI and NI ratios */
-	for (i = 0; i < ARRAY_SIZE(user_pclk_rates); i++) {
-		if ((user_pclk_rates[i] == max98090->pclk) &&
-			(user_lrclk_rates[i] == max98090->lrclk)) {
+	for (i = 0; i < ARRAY_SIZE(user_bclk_table); i++) {
+		if ((user_bclk_table[i].pclk == max98090->pclk) &&
+			(user_bclk_table[i].lrclk == max98090->lrclk)) {
 			dev_dbg(codec->dev,
 				"Found user supported PCLK to LRCLK rates\n");
 			dev_dbg(codec->dev, "i %d ni %lld mi %lld\n",
-				i, ni_value[i], mi_value[i]);
+				i, user_bclk_table[i].ni, user_bclk_table[i].mi);
 
 			snd_soc_update_bits(codec, M98090_REG_CLOCK_MODE,
 				M98090_FREQ_MASK, 0);
@@ -1552,13 +1558,13 @@ static void max98090_configure_bclk(struct snd_soc_codec *codec)
 					1 << M98090_USE_M1_SHIFT);
 
 			snd_soc_write(codec, M98090_REG_CLOCK_RATIO_NI_MSB,
-				(ni_value[i] >> 8) & 0x7F);
+				(user_bclk_table[i].ni >> 8) & 0x7F);
 			snd_soc_write(codec, M98090_REG_CLOCK_RATIO_NI_LSB,
-				ni_value[i] & 0xFF);
+				user_bclk_table[i].ni & 0xFF);
 			snd_soc_write(codec, M98090_REG_CLOCK_RATIO_MI_MSB,
-				(mi_value[i] >> 8) & 0x7F);
+				(user_bclk_table[i].mi >> 8) & 0x7F);
 			snd_soc_write(codec, M98090_REG_CLOCK_RATIO_MI_LSB,
-				mi_value[i] & 0xFF);
+				user_bclk_table[i].mi & 0xFF);
 
 			return;
 		}
