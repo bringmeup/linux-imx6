@@ -1495,8 +1495,17 @@ static const struct bclk_config_table exact_bclk_table[] = {
 
 // Used for Manual Ratio Mode
 static const struct bclk_config_table user_bclk_table[] = {
+	BCLK_CONFIG(12000000, 8000, 375, 32),
+	BCLK_CONFIG(12000000, 11025, 1250, 147),
+	BCLK_CONFIG(12000000, 16000, 375, 64),
+	BCLK_CONFIG(12000000, 22050, 625, 147),
+	BCLK_CONFIG(12000000, 24000, 125, 32),
+	BCLK_CONFIG(12000000, 32000, 375, 128),
 	BCLK_CONFIG(12000000, 44100, 625, 294),
-	BCLK_CONFIG(12000000, 48000, 0, 0), // TBD
+// Currently do not support 48000 because need to force change
+// OSR128 flag reg 0x44 bit 2 to 0 = 64xFs. All above use
+// over sampling rate scalar 128.
+//	BCLK_CONFIG(12000000, 48000, 125, 64),
 	BCLK_CONFIG(13000000, 44100, 8125, 3528),
 	BCLK_CONFIG(13000000, 48000, 1625, 768),
 	BCLK_CONFIG(19200000, 44100, 1500, 441),
