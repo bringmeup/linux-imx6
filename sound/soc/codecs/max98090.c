@@ -1521,7 +1521,7 @@ static void max98090_configure_bclk(struct snd_soc_codec *codec)
 
 	/* Check for supported PCLK to LRCLK ratios */
 	for (i = 0; i < ARRAY_SIZE(pclk_rates); i++) {
-		if ((pclk_rates[i] == max98090->sysclk) &&
+		if ((pclk_rates[i] == max98090->pclk) &&
 			(lrclk_rates[i] == max98090->lrclk)) {
 			dev_dbg(codec->dev,
 				"Found supported PCLK to LRCLK rates 0x%x\n",
@@ -1538,7 +1538,7 @@ static void max98090_configure_bclk(struct snd_soc_codec *codec)
 
 	/* Check for user calculated MI and NI ratios */
 	for (i = 0; i < ARRAY_SIZE(user_pclk_rates); i++) {
-		if ((user_pclk_rates[i] == max98090->sysclk) &&
+		if ((user_pclk_rates[i] == max98090->pclk) &&
 			(user_lrclk_rates[i] == max98090->lrclk)) {
 			dev_dbg(codec->dev,
 				"Found user supported PCLK to LRCLK rates\n");
