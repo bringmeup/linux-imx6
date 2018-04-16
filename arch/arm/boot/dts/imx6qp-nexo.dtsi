@@ -883,7 +883,7 @@
 };
 
 &ssi1 {
-	fsl,mode = "i2s-master";
+	fsl,mode = "i2s-slave";
 	status = "okay";
 };
 

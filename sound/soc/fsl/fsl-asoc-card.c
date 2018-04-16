@@ -564,7 +564,7 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
 			|| of_device_is_compatible(np, "fsl,imx-audio-max98091"))) {
 		codec_dai_name = "HiFi";
 		priv->codec_priv.mclk_id = 0x00;
-		priv->dai_fmt |= SND_SOC_DAIFMT_CBS_CFS;
+		priv->dai_fmt |= SND_SOC_DAIFMT_CBM_CFM;
 	} else {
 		dev_err(&pdev->dev, "unknown Device Tree compatible\n");
 		ret = -EINVAL;
