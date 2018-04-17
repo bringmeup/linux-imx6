@@ -134,6 +134,12 @@ static const struct snd_soc_dapm_widget fsl_asoc_card_dapm_widgets[] = {
 	SND_SOC_DAPM_MIC("DMIC", NULL),
 };
 
+static const struct snd_kcontrol_new fsl_asoc_card_controls[] = {
+	SOC_DAPM_PIN_SWITCH("Ext Spk"),
+	SOC_DAPM_PIN_SWITCH("Headphone Jack"),
+	SOC_DAPM_PIN_SWITCH("Mic Jack"),
+};
+
 static bool fsl_asoc_card_is_ac97(struct fsl_asoc_card_priv *priv)
 {
 	return priv->dai_fmt == SND_SOC_DAIFMT_AC97;
@@ -606,6 +612,8 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
 				 audio_map_ac97 : audio_map;
 	priv->card.late_probe = fsl_asoc_card_late_probe;
 	priv->card.num_dapm_routes = ARRAY_SIZE(audio_map);
+	priv->card.controls = fsl_asoc_card_controls;
+	priv->card.num_controls = ARRAY_SIZE(fsl_asoc_card_controls);
 	priv->card.dapm_widgets = fsl_asoc_card_dapm_widgets;
 	priv->card.num_dapm_widgets = ARRAY_SIZE(fsl_asoc_card_dapm_widgets);
 
