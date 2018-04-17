@@ -711,6 +711,7 @@
 		csi_id = <1>;
 		mipi_camera = <1>;
 		mclk_source = <0>;
+		mirror = <1>;
 		status = "okay";
 	};
 
