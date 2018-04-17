@@ -692,7 +692,12 @@
 		ssi-controller = <&ssi1>;
 		audio-codec = <&max98091>;
 		audio-routing =
-			"Headphone Jack", "HP_OUT";
+			"Headphone Jack", "HPR",
+			"Headphone Jack", "HPL",
+			"Ext Spk","SPKL",
+			"Ext Spk","SPKR",
+			"Mic Jack", "MICBIAS",
+			"IN56", "Mic Jack";
 		mux-int-port = <1>;
 		mux-ext-port = <4>;
 	};
