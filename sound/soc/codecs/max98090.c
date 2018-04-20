@@ -404,12 +404,6 @@ static int max98090_put_enab_tlv(struct snd_kcontrol *kcontrol,
 	unsigned int *select;
 
 	switch (mc->reg) {
-	case M98090_REG_MIC1_INPUT_LEVEL:
-		select = &(max98090->pa1en);
-		break;
-	case M98090_REG_MIC2_INPUT_LEVEL:
-		select = &(max98090->pa2en);
-		break;
 	case M98090_REG_ADC_SIDETONE:
 		select = &(max98090->sidetone);
 		break;
@@ -445,6 +439,35 @@ static SOC_ENUM_SINGLE_DECL(max98090_vcmbandgap_enum,
 			    M98090_REG_BIAS_CONTROL,
 			    M98090_VCM_MODE_SHIFT,
 			    max98090_pwr_perf_text);
+
+static const char *max98090_mic_boost_text[] =
+    { "Disabled", "0db", "20db", "30db"};
+
+static SOC_ENUM_SINGLE_DECL(max98090_mic1_boost_enum,
+			    M98090_REG_MIC1_INPUT_LEVEL,
+			    M98090_MIC_PA1EN_SHIFT,
+			    max98090_mic_boost_text);
+
+static SOC_ENUM_SINGLE_DECL(max98090_mic2_boost_enum,
+			    M98090_REG_MIC2_INPUT_LEVEL,
+			    M98090_MIC_PA2EN_SHIFT,
+			    max98090_mic_boost_text);
+
+static const char *max98090_mic_volume_text[] =
+    { "20db", "19db", "18db", "17db", "16db", "15db",
+      "14db", "13db", "12db", "11db", "10db", "9db",
+      "8db", "7db", "6db", "5db", "4db", "3db",
+      "2db", "1db", "0db" };
+
+static SOC_ENUM_SINGLE_DECL(max98090_mic1_volume_enum,
+			    M98090_REG_MIC1_INPUT_LEVEL,
+			    M98090_MIC_PGAM2_SHIFT,
+			    max98090_mic_volume_text);
+
+static SOC_ENUM_SINGLE_DECL(max98090_mic2_volume_enum,
+			    M98090_REG_MIC2_INPUT_LEVEL,
+			    M98090_MIC_PGAM2_SHIFT,
+			    max98090_mic_volume_text);
 
 static const char *max98090_osr128_text[] = { "64*fs", "128*fs" };
 
@@ -517,23 +540,10 @@ static const struct snd_kcontrol_new max98090_snd_controls[] = {
 	SOC_SINGLE("DMIC MIC Comp Filter Config", M98090_REG_DIGITAL_MIC_CONFIG,
 		M98090_DMIC_COMP_SHIFT, M98090_DMIC_COMP_NUM - 1, 0),
 
-	SOC_SINGLE_EXT_TLV("MIC1 Boost Volume",
-		M98090_REG_MIC1_INPUT_LEVEL, M98090_MIC_PA1EN_SHIFT,
-		M98090_MIC_PA1EN_NUM - 1, 0, max98090_get_enab_tlv,
-		max98090_put_enab_tlv, max98090_micboost_tlv),
-
-	SOC_SINGLE_EXT_TLV("MIC2 Boost Volume",
-		M98090_REG_MIC2_INPUT_LEVEL, M98090_MIC_PA2EN_SHIFT,
-		M98090_MIC_PA2EN_NUM - 1, 0, max98090_get_enab_tlv,
-		max98090_put_enab_tlv, max98090_micboost_tlv),
-
-	SOC_SINGLE_TLV("MIC1 Volume", M98090_REG_MIC1_INPUT_LEVEL,
-		M98090_MIC_PGAM1_SHIFT, M98090_MIC_PGAM1_NUM - 1, 1,
-		max98090_mic_tlv),
-
-	SOC_SINGLE_TLV("MIC2 Volume", M98090_REG_MIC2_INPUT_LEVEL,
-		M98090_MIC_PGAM2_SHIFT, M98090_MIC_PGAM2_NUM - 1, 1,
-		max98090_mic_tlv),
+    SOC_ENUM("MIC1 Boost Volume", max98090_mic1_boost_enum),
+    SOC_ENUM("MIC2 Boost Volume", max98090_mic2_boost_enum),
+    SOC_ENUM("MIC1 Volume", max98090_mic1_volume_enum),
+    SOC_ENUM("MIC2 Volume", max98090_mic2_volume_enum),
 
 	SOC_SINGLE_RANGE_TLV("LINEA Single Ended Volume",
 		M98090_REG_LINE_INPUT_LEVEL, M98090_MIXG135_SHIFT, 0,
@@ -733,47 +743,6 @@ static const struct snd_kcontrol_new max98091_snd_controls[] = {
 static int max98090_micinput_event(struct snd_soc_dapm_widget *w,
 				 struct snd_kcontrol *kcontrol, int event)
 {
-	struct snd_soc_codec *codec = snd_soc_dapm_to_codec(w->dapm);
-	struct max98090_priv *max98090 = snd_soc_codec_get_drvdata(codec);
-
-	unsigned int val = snd_soc_read(codec, w->reg);
-
-	if (w->reg == M98090_REG_MIC1_INPUT_LEVEL)
-		val = (val & M98090_MIC_PA1EN_MASK) >> M98090_MIC_PA1EN_SHIFT;
-	else
-		val = (val & M98090_MIC_PA2EN_MASK) >> M98090_MIC_PA2EN_SHIFT;
-
-	if (val >= 1) {
-		if (w->reg == M98090_REG_MIC1_INPUT_LEVEL) {
-			max98090->pa1en = val - 1; /* Update for volatile */
-		} else {
-			max98090->pa2en = val - 1; /* Update for volatile */
-		}
-	}
-
-	switch (event) {
-	case SND_SOC_DAPM_POST_PMU:
-		/* If turning on, set to most recently selected volume */
-		if (w->reg == M98090_REG_MIC1_INPUT_LEVEL)
-			val = max98090->pa1en + 1;
-		else
-			val = max98090->pa2en + 1;
-		break;
-	case SND_SOC_DAPM_POST_PMD:
-		/* If turning off, turn off */
-		val = 0;
-		break;
-	default:
-		return -EINVAL;
-	}
-
-	if (w->reg == M98090_REG_MIC1_INPUT_LEVEL)
-		snd_soc_update_bits(codec, w->reg, M98090_MIC_PA1EN_MASK,
-			val << M98090_MIC_PA1EN_SHIFT);
-	else
-		snd_soc_update_bits(codec, w->reg, M98090_MIC_PA2EN_MASK,
-			val << M98090_MIC_PA2EN_SHIFT);
-
 	return 0;
 }
 
@@ -816,18 +785,6 @@ static SOC_ENUM_SINGLE_VIRT_DECL(dmic_mux_enum, dmic_mux_text);
 
 static const struct snd_kcontrol_new max98090_dmic_mux =
 	SOC_DAPM_ENUM("DMIC Mux", dmic_mux_enum);
-
-static const char *max98090_micpre_text[] = { "Off", "On" };
-
-static SOC_ENUM_SINGLE_DECL(max98090_pa1en_enum,
-			    M98090_REG_MIC1_INPUT_LEVEL,
-			    M98090_MIC_PA1EN_SHIFT,
-			    max98090_micpre_text);
-
-static SOC_ENUM_SINGLE_DECL(max98090_pa2en_enum,
-			    M98090_REG_MIC2_INPUT_LEVEL,
-			    M98090_MIC_PA2EN_SHIFT,
-			    max98090_micpre_text);
 
 /* LINEA mixer switch */
 static const struct snd_kcontrol_new max98090_linea_mixer_controls[] = {
