@@ -1,0 +1,20 @@
+make CROSS_COMPILE=../prebuilts/gcc/linux-x86/arm/arm-eabi-4.8/bin/arm-eabi- ARCH=arm nexwell_android_defconfig
+
+adb connect 192.168.1.221
+adb connect 192.168.1.204
+adb remount
+
+OUT=/media/michal/0898ef20-d1ae-494a-b044-509148b0b18d/workspace/aosp/out/target/product/nexo
+
+make CROSS_COMPILE=../prebuilts/gcc/linux-x86/arm/arm-eabi-4.8/bin/arm-eabi- ARCH=arm dtbs -j 10
+cp ./arch/arm/boot/dts/imx6qp-nexo.dtb $OUT/boot
+adb push ./arch/arm/boot/dts/imx6qp-nexo.dtb /boot/
+
+make CROSS_COMPILE=../prebuilts/gcc/linux-x86/arm/arm-eabi-4.8/bin/arm-eabi- ARCH=arm zImage -j 10
+cp ./arch/arm/boot/zImage $OUT/boot
+adb push ./arch/arm/boot/zImage /boot/
+
+make CROSS_COMPILE=../prebuilts/gcc/linux-x86/arm/arm-eabi-4.8/bin/arm-eabi- ARCH=arm modules -j 10
+cp ./drivers/net/wireless/ti/wl18xx/wl18xx.ko $OUT/system/lib/modules
+adb push ./drivers/net/wireless/ti/wl18xx/wl18xx.ko /system/lib/modules
+
