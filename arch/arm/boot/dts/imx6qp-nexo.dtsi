@@ -767,8 +767,8 @@
 		#address-cells = <0>;
 		#size-cells = <1>;
 
-		ethphy: ethernet-phy@3 {
-			reg = <3>;
+		ethphy: ethernet-phy@7 {
+			reg = <7>;
 			interrupts-extended = GPIRQ_ENET_PHY;
 		};
 	};
